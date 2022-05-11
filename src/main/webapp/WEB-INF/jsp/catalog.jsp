@@ -26,19 +26,40 @@
                     <%--     SORT BY    --%>
                     <h5><fmt:message key="catalog_jsp.search.search"/></h5>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="search_by" id="by_name_id" value="NAME" checked>
+                        <c:choose>
+                            <c:when test="${searchBy eq 'NAME' || empty searchBy}">
+                                <input class="form-check-input" type="radio" name="search_by" id="by_name_id" value="NAME" checked>
+                            </c:when>
+                            <c:otherwise>
+                                <input class="form-check-input" type="radio" name="search_by" id="by_name_id" value="NAME">
+                            </c:otherwise>
+                        </c:choose>
                         <label class="form-check-label" for="by_name_id">
                             <fmt:message key="catalog_jsp.search.by_name" />
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="search_by" id="by_author_id" value="AUTHOR">
+                        <c:choose>
+                            <c:when test="${searchBy eq 'AUTHOR'}">
+                                <input class="form-check-input" type="radio" name="search_by" id="by_author_id" value="AUTHOR" checked>
+                            </c:when>
+                            <c:otherwise>
+                                <input class="form-check-input" type="radio" name="search_by" id="by_author_id" value="AUTHOR">
+                            </c:otherwise>
+                        </c:choose>
                         <label class="form-check-label" for="by_author_id">
                             <fmt:message key="catalog_jsp.search.by_author" />
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="search_by" id="by_publisher" value="PUBLISHER">
+                        <c:choose>
+                            <c:when test="${searchBy eq 'PUBLISHER'}">
+                                <input class="form-check-input" type="radio" name="search_by" id="by_publisher" value="PUBLISHER" checked>
+                            </c:when>
+                            <c:otherwise>
+                                <input class="form-check-input" type="radio" name="search_by" id="by_publisher" value="PUBLISHER">
+                            </c:otherwise>
+                        </c:choose>
                         <label class="form-check-label" for="by_publisher">
                             <fmt:message key="catalog_jsp.search.by_publisher" />
                         </label>

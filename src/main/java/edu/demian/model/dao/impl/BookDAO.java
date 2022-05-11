@@ -64,6 +64,24 @@ public class BookDAO implements DataAccessObject {
         }
     }
 
+    public List<Book> searchAll(String searchBy, String searchData,  String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset) {
+        String formattedQuery = String.format(SQL_SEARCH_BOOK, searchBy, nameOrder, authorOrder, publisherOrder, publishedDateOrder);
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(formattedQuery)) {
+            pstmt.setString(1, "%" + searchData + "%");
+            pstmt.setInt(2, limit);
+            pstmt.setLong(3, offset);
+            rs = pstmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            return toBookList(metaData, rs);
+        } catch (SQLException e) {
+            throw new DaoException("Can't search for books", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
 
     public void save(Book book) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();

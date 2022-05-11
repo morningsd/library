@@ -23,15 +23,18 @@ public class CatalogPageAction extends Action {
     protected String doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
-        String nameOrder = getAttribute(session, "nameOrder", "catalog.sort.");
-        String authorOrder = getAttribute(session, "authorOrder", "catalog.sort.");
-        String publisherOrder = getAttribute(session, "publisherOrder", "catalog.sort.");
-        String publisherDateOrder = getAttribute(session, "publishedDateOrder", "catalog.sort.");
+        String searchData = request.getParameter("search_data");
+        String searchBy = request.getParameter("search_by");
+
+        String nameOrder = (String) getAttribute(session, "nameOrder", "catalog.sort.");
+        String authorOrder = (String) getAttribute(session, "authorOrder", "catalog.sort.");
+        String publisherOrder = (String) getAttribute(session, "publisherOrder", "catalog.sort.");
+        String publisherDateOrder = (String) getAttribute(session, "publishedDateOrder", "catalog.sort.");
         int limit = Integer.parseInt(getApplicationProperty("catalog.sort.limit"));
 
-        long currentPage = Long.parseLong(getAttribute(session, "currentPage", "catalog.sort."));
+        String currentPage = (String) getAttribute(session, "currentPage", "catalog.sort.");
 
-        long offset = getOffset(currentPage, limit);
+        long offset = getOffset(Long.parseLong(currentPage), limit);
 
         session.setAttribute("nameOrder", nameOrder);
         session.setAttribute("authorOrder", authorOrder);
@@ -39,10 +42,17 @@ public class CatalogPageAction extends Action {
         session.setAttribute("publishedDateOrder", publisherDateOrder);
         session.setAttribute("currentPage", currentPage);
 
-        List<Book> bookList = bookDAO.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        session.setAttribute("searchData", searchData);
+        session.setAttribute("searchBy", searchBy);
+
+        List<Book> bookList;
+        if (searchData != null) {
+            bookList = bookDAO.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        } else {
+            bookList = bookDAO.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        }
 
         session.setAttribute("bookList", bookList);
-
         return "/catalog";
     }
 
@@ -51,9 +61,9 @@ public class CatalogPageAction extends Action {
         throw new UnsupportedOperationException("This url does not support POST method");
     }
 
-    private String getAttribute(HttpSession session, String name, String propertyPrefix) {
-        String userValue = (String) session.getAttribute(name);
-        String propertiesValue = getApplicationProperty(propertyPrefix + name);
+    private Object getAttribute(HttpSession session, String name, String propertyPrefix) {
+        Object userValue = session.getAttribute(name);
+        Object propertiesValue = getApplicationProperty(propertyPrefix + name);
         return userValue == null ? propertiesValue : userValue;
     }
 
