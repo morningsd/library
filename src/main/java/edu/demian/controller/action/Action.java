@@ -15,8 +15,8 @@ public abstract class Action {
 		throw new ActionException("Unsupported method: " + method + " is not supported for path: " + request.getPathInfo());
 	}
 
-	protected abstract String doGet(HttpServletRequest request, HttpServletResponse response);
+	protected abstract String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException;
 	
-	protected abstract String doPost(HttpServletRequest request, HttpServletResponse response);
+	protected abstract String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException;
 		
 }

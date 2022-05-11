@@ -1,7 +1,7 @@
 package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
-import edu.demian.model.dao.AccountDAO;
+import edu.demian.model.dao.impl.AccountDAO;
 import edu.demian.model.entity.Account;
 
 import javax.servlet.http.HttpServletRequest;

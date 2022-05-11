@@ -2,19 +2,20 @@ package edu.demian.model.entity;
 
 public class Account implements BaseEntity {
 
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
 
-    private boolean isAdmin;
-    private int roleId;
+    private Boolean isAdmin;
+    private Integer roleId;
 
-    public long getId() {
+    @Override
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -42,29 +43,32 @@ public class Account implements BaseEntity {
         this.email = email;
     }
 
-    public boolean isAdmin() {
+    public Boolean getAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(Boolean admin) {
         isAdmin = admin;
     }
 
-    public int getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
+    @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", isAdmin=" + isAdmin +
                 ", roleId=" + roleId +
                 '}';
     }
+
 }

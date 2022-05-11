@@ -22,7 +22,6 @@
         </button>
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/jsp/home">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/jsp/catalog">Catalog</a></li>
                 <c:choose>
                     <c:when test="${empty accountRole}">
@@ -38,24 +37,33 @@
                     <c:when test="${empty account}">
                     </c:when>
                     <c:otherwise>
+                        <c:if test="${isAdmin == 'true'}">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle nav-link" type="button" id="dropdownMenuButtonAdmin" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                    Administration
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonAdmin">
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/addBook">Add book</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageLibrarians">Add/delete librarian</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageAccounts">Block/unblock account</a></li>
+                                </div>
+                            </div>
+                        </c:if>
                         <c:if test="${accountRole == 'LIBRARIAN'}">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                <button class="btn dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
                                     Management
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/manager/addRoom">Add Room</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/client/addApplication">Create
-                                        Application</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/manager/viewApplications">View
-                                        Applications</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/librarian/bookOrders">Book orders</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/librarian/readersList">Readers list</a></li>
                                 </div>
                             </div>
                         </c:if>
                         <c:if test="${accountRole == 'READER'}">
-                            <li class="nav-item"><a class="nav-link" href="/jsp/client/addApplication">Create
-                                Application</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/jsp/reader/addOrder">Create order</a></li>
                         </c:if>
                         <li class="nav-item"><a class="nav-link" href="/jsp/logout">Logout</a></li>
                     </c:otherwise>

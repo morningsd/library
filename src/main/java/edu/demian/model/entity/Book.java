@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Book implements BaseEntity {
 
-    private long id;
+    private Long id;
 
     private String name;
 
@@ -14,15 +14,16 @@ public class Book implements BaseEntity {
 
     private LocalDate publishedDate;
 
-    private int quantity;
+    private Integer quantity;
 
-    private long accountId;
+    private Long accountId;
 
-    public long getId() {
+    @Override
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,19 +59,33 @@ public class Book implements BaseEntity {
         this.publishedDate = publishedDate;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public long getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(long accountId) {
+    public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", publishedDate=" + publishedDate +
+                ", quantity=" + quantity +
+                ", accountId=" + accountId +
+                '}';
+    }
+
 }

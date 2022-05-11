@@ -1,14 +1,15 @@
-package edu.demian.model.dao;
+package edu.demian.model.dao.impl;
 
 import com.google.common.hash.Hashing;
 import edu.demian.model.DBManager;
+import edu.demian.model.dao.DataAccessObject;
 import edu.demian.model.entity.Account;
 import edu.demian.model.exception.DaoException;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
-public class AccountDAO {
+public class AccountDAO implements DataAccessObject {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
 
@@ -26,7 +27,7 @@ public class AccountDAO {
     private static final String SQL_INSERT_ACCOUNT = "INSERT INTO account " +
             "(first_name, last_name, email, password, is_admin, role_id) VALUES (?,?,?,?,?,?)";
 
-    public Account find(long id) {
+    public Account find(Long id) {
         ResultSet rs = null;
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
                 PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ACCOUNT, Statement.RETURN_GENERATED_KEYS)) {
@@ -68,7 +69,7 @@ public class AccountDAO {
             pstmt.setString(k++, account.getLastName());
             pstmt.setString(k++, account.getEmail());
             pstmt.setString(k++, hashPassword(password));
-            pstmt.setBoolean(k++, account.isAdmin());
+            pstmt.setBoolean(k++, account.getAdmin());
             pstmt.setInt(k, account.getRoleId());
             if (pstmt.executeUpdate() == 1) {
                 ResultSet rs = pstmt.getGeneratedKeys();
