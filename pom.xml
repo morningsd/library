@@ -9,19 +9,33 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<javax.servlet.jstl.version>1.2</javax.servlet.jstl.version>
+		<javax.servlet.servlet-api.version>4.0.1</javax.servlet.servlet-api.version>
+		<postgresql.driver.version>42.3.5</postgresql.driver.version>
+		<com.google.guava.version>31.1-jre</com.google.guava.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${javax.servlet.jstl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
+			<version>${javax.servlet.servlet-api.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.driver.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${com.google.guava.version}</version>
 		</dependency>
 	</dependencies>
 

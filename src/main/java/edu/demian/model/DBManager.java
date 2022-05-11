@@ -20,7 +20,7 @@ public class DBManager {
 
             dataSource = (DataSource) envContext.lookup("jdbc/library");
         } catch (NamingException e) {
-            // some logging
+            e.printStackTrace();
         }
     }
 
@@ -36,27 +36,35 @@ public class DBManager {
         try {
             con = dataSource.getConnection();
         } catch (SQLException e) {
-            // Some logging
+            e.printStackTrace();
         }
         return con;
     }
 
+    public void close(AutoCloseable autoCloseable) {
+        if (autoCloseable != null) {
+            try {
+                autoCloseable.close();
+            } catch (Exception ignored) {}
+        }
+    }
+
     public void rollbackClose(Connection con) {
         try {
-            con.rollback();
-            con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+            if (con != null) {
+                con.rollback();
+                con.close();
+            }
+        } catch (SQLException ignored) {}
     }
 
     public void commitClose(Connection con) {
         try {
-            con.commit();
-            con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+            if (con != null) {
+                con.commit();
+                con.close();
+            }
+        } catch (SQLException ignored) {}
     }
 
 }

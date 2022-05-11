@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import edu.demian.controller.action.impl.HomePageAction;
+import edu.demian.controller.action.impl.*;
 
 public class ActionFactory {
 	
@@ -13,9 +13,15 @@ public class ActionFactory {
 
     static {
     	actions.put("/home", new HomePageAction());
+        actions.put("/login", new LoginPageAction());
+        actions.put("/register", new RegisterPageAction());
+        actions.put("/error", new ErrorPageAction());
+        actions.put("/logout", new LogoutPageAction());
+        actions.put("/catalog", new CatalogPageAction());
+        actions.put("/cabinet", new CabinetPageAction());
     }
 
     public static Action getAction(HttpServletRequest request) {
-		return actions.get(/* request.getMethod() + */request.getPathInfo());
+		return actions.get(request.getPathInfo());
     }
 }

@@ -14,7 +14,7 @@ public class HomePageAction extends Action {
 
 	@Override
 	protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("This url does not support POST method");
 	}
 
 

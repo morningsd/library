@@ -4,6 +4,5 @@
               username="postgres" password="postgres"
               driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://localhost:5432/library"
-              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
-              defaultAutoCommit="false"/>
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"/>
 </Context>
