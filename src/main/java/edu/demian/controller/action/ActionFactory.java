@@ -19,6 +19,13 @@ public class ActionFactory {
         actions.put("/logout", new LogoutPageAction());
         actions.put("/catalog", new CatalogPageAction());
         actions.put("/cabinet", new CabinetPageAction());
+        actions.put("/admin/addBook", new AddBookAction());
+        actions.put("/admin/manageLibrarians", new ManageLibrariansAction());
+        actions.put("/admin/addLibrarian", new AddLibrarianAction());
+        actions.put("/admin/deleteLibrarian", new DeleteLibrarianAction());
+        actions.put("/admin/manageAccounts", new ManageAccountAction());
+        actions.put("/admin/blockAccount", new BlockAccountAction());
+        actions.put("/admin/unblockAccount", new UnblockAccountAction());
     }
 
     public static Action getAction(HttpServletRequest request) {

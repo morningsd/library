@@ -23,13 +23,18 @@ public class CatalogPageAction extends Action {
     protected String doGet(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
 
+        String requestNameOrder = request.getParameter("sort_name");
+        String requestAuthorOrder = request.getParameter("sort_author");
+        String requestPublisherOrder = request.getParameter("sort_publisher");
+        String requestPublishedDateOrder = request.getParameter("sort_date");
+
         String searchData = request.getParameter("search_data");
         String searchBy = request.getParameter("search_by");
 
-        String nameOrder = (String) getAttribute(session, "nameOrder", "catalog.sort.");
-        String authorOrder = (String) getAttribute(session, "authorOrder", "catalog.sort.");
-        String publisherOrder = (String) getAttribute(session, "publisherOrder", "catalog.sort.");
-        String publisherDateOrder = (String) getAttribute(session, "publishedDateOrder", "catalog.sort.");
+        String nameOrder = (requestNameOrder == null) ? (String) getAttribute(session, "nameOrder", "catalog.sort.") : requestNameOrder;
+        String authorOrder = (requestAuthorOrder == null) ? (String) getAttribute(session, "authorOrder", "catalog.sort.") : requestAuthorOrder;
+        String publisherOrder = (requestPublisherOrder == null) ? (String) getAttribute(session, "publisherOrder", "catalog.sort.") : requestPublisherOrder;
+        String publisherDateOrder = (requestPublishedDateOrder == null) ? (String) getAttribute(session, "publishedDateOrder", "catalog.sort.") : requestPublishedDateOrder;
         int limit = Integer.parseInt(getApplicationProperty("catalog.sort.limit"));
 
         String currentPage = (String) getAttribute(session, "currentPage", "catalog.sort.");

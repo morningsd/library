@@ -92,7 +92,12 @@ public class BookDAO implements DataAccessObject {
             pstmt.setString(k++, book.getPublisher());
             pstmt.setObject(k++, book.getPublishedDate());
             pstmt.setInt(k++, book.getQuantity());
-            pstmt.setLong(k, book.getAccountId());
+            Long bookOwner = book.getAccountId();
+            if (bookOwner == null) {
+                pstmt.setNull(k, Types.BIGINT);
+            } else {
+                pstmt.setLong(k, bookOwner);
+            }
             if (pstmt.executeUpdate() == 1) {
                 ResultSet rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
@@ -139,7 +144,6 @@ public class BookDAO implements DataAccessObject {
         } catch (SQLException e) {
             throw new DaoException("Can't delete a book", e);
         }
-
     }
 
     private List<Book> toBookList(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {

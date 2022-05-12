@@ -7,7 +7,7 @@
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
     <div class="row">
         <div class="col-md-3">
-            <form class="search_form" id="search_form" method="post" action="/jsp/search">
+            <form class="search_form" id="search_form" method="get" action="/jsp/catalog">
                 <input class="form-control form-control-sm search_box" type="search"
                        placeholder="<fmt:message key="home_jsp.placeholder.search"/>"
                        name="search_data" value="${searchData}"

@@ -4,10 +4,13 @@ import com.google.common.hash.Hashing;
 import edu.demian.model.DBManager;
 import edu.demian.model.dao.DataAccessObject;
 import edu.demian.model.entity.Account;
+import edu.demian.model.entity.Book;
 import edu.demian.model.exception.DaoException;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AccountDAO implements DataAccessObject {
 
@@ -18,14 +21,18 @@ public class AccountDAO implements DataAccessObject {
     private static final String SQL_ACCOUNT_LNAME = "last_name";
     private static final String SQL_ACCOUNT_EMAIL = "email";
     private static final String SQL_ACCOUNT_IS_ADMIN = "is_admin";
+    private static final String SQL_ACCOUNT_IS_BLOCKED = "is_blocked";
     private static final String SQL_ACCOUNT_ROLE_ID = "role_id";
 
 
     private static final String SQL_FIND_ACCOUNT = "SELECT * FROM account WHERE id=?";
     private static final String SQL_FIND_ACCOUNT_BY_EMAIL_AND_PASSWORD = "SELECT * FROM account WHERE email=?" +
-            " AND password=?";
+            " AND password=? AND is_blocked=FALSE";
+    private static final String SQL_FIND_ALL = "SELECT * FROM account";
+    private static final String SQL_FIND_ALL_LIBRARIANS = "SELECT * FROM account WHERE role_id = (SELECT id FROM role WHERE name='LIBRARIAN')";
+    private static final String SQL_DELETE_ACCOUNT = "DELETE FROM account WHERE id=?";
     private static final String SQL_INSERT_ACCOUNT = "INSERT INTO account " +
-            "(first_name, last_name, email, password, is_admin, role_id) VALUES (?,?,?,?,?,?)";
+            "(first_name, last_name, email, password, is_admin, is_blocked, role_id) VALUES (?,?,?,?,?,?,?)";
 
     public Account find(Long id) {
         ResultSet rs = null;
@@ -60,6 +67,35 @@ public class AccountDAO implements DataAccessObject {
     }
 
 
+    public List<Account> findAll() {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL)) {
+            rs = pstmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            return toAccountList(metaData, rs);
+        } catch (SQLException e) {
+            throw new DaoException("Can't find all users", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    public List<Account> findAllLibrarians() {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_LIBRARIANS)) {
+            rs = pstmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            return toAccountList(metaData, rs);
+        } catch (SQLException e) {
+            throw new DaoException("Can't find all librarians", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+
 
     public void save(Account account, String password) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
@@ -69,7 +105,18 @@ public class AccountDAO implements DataAccessObject {
             pstmt.setString(k++, account.getLastName());
             pstmt.setString(k++, account.getEmail());
             pstmt.setString(k++, hashPassword(password));
-            pstmt.setBoolean(k++, account.getAdmin());
+            Boolean isAdmin = account.getAdmin();
+            if (isAdmin != null) {
+                pstmt.setBoolean(k++, isAdmin);
+            } else {
+                pstmt.setBoolean(k++, Boolean.FALSE);
+            }
+            Boolean isBlocked = account.getBlocked();
+            if (isBlocked != null) {
+                pstmt.setBoolean(k++, isBlocked);
+            } else {
+                pstmt.setBoolean(k++, Boolean.FALSE);
+            }
             pstmt.setInt(k, account.getRoleId());
             if (pstmt.executeUpdate() == 1) {
                 ResultSet rs = pstmt.getGeneratedKeys();
@@ -87,8 +134,44 @@ public class AccountDAO implements DataAccessObject {
         }
     }
 
+    public void delete(Long id) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_DELETE_ACCOUNT)) {
+            pstmt.setLong(1, id);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't delete an account");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't delete an account", e);
+        }
+    }
+
+
+
+    public void block(Long accountId) {
+
+    }
+
+    public void unblock(Long accountId) {
+        
+    }
+
     private String hashPassword(String passwordToHash) {
         return Hashing.sha256().hashString(passwordToHash, StandardCharsets.UTF_8).toString();
+    }
+
+    private List<Account> toAccountList(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {
+        List<Account> accountList = new LinkedList<>();
+
+        while (true) {
+            Account account = toAccount(metaData, resultSet);
+            if (account == null) {
+                break;
+            }
+            accountList.add(account);
+        }
+
+        return accountList;
     }
 
     private Account toAccount(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {
@@ -114,6 +197,9 @@ public class AccountDAO implements DataAccessObject {
                     break;
                 case SQL_ACCOUNT_IS_ADMIN:
                     account.setAdmin(resultSet.getBoolean(i));
+                    break;
+                case SQL_ACCOUNT_IS_BLOCKED:
+                    account.setBlocked(resultSet.getBoolean(i));
                     break;
                 case SQL_ACCOUNT_ROLE_ID:
                     account.setRoleId(resultSet.getInt(i));

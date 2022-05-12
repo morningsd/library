@@ -6,8 +6,8 @@ public class Account implements BaseEntity {
     private String firstName;
     private String lastName;
     private String email;
-
     private Boolean isAdmin;
+    private Boolean isBlocked;
     private Integer roleId;
 
     @Override
@@ -51,6 +51,14 @@ public class Account implements BaseEntity {
         isAdmin = admin;
     }
 
+    public Boolean getBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        isBlocked = blocked;
+    }
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -67,8 +75,8 @@ public class Account implements BaseEntity {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", isAdmin=" + isAdmin +
+                ", isBlocked=" + isBlocked +
                 ", roleId=" + roleId +
                 '}';
     }
-
 }
