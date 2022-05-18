@@ -50,21 +50,6 @@
                                 </div>
                             </div>
                         </c:if>
-                        <c:if test="${accountRole == 'LIBRARIAN'}">
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                    Management
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/librarian/bookOrders">Book orders</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/librarian/readersList">Readers list</a></li>
-                                </div>
-                            </div>
-                        </c:if>
-                        <c:if test="${accountRole == 'READER'}">
-                            <li class="nav-item"><a class="nav-link" href="/jsp/reader/addOrder">Create order</a></li>
-                        </c:if>
                         <li class="nav-item"><a class="nav-link" href="/jsp/logout">Logout</a></li>
                     </c:otherwise>
                 </c:choose>

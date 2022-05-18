@@ -2,14 +2,14 @@ package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
-import edu.demian.model.dao.impl.AccountDAO;
+import edu.demian.model.dao.impl.AccountDaoImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class DeleteLibrarianAction extends Action {
 
-    private final AccountDAO accountDAO = new AccountDAO();
+    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
 
     @Override
     protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {

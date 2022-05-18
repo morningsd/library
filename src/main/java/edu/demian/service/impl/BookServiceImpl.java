@@ -1,28 +1,20 @@
-package edu.demian.controller.action.impl;
+package edu.demian.service.impl;
 
-import edu.demian.controller.action.Action;
-import edu.demian.controller.action.ActionException;
+import edu.demian.model.dao.BookDao;
+import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
 import edu.demian.service.BookService;
-import edu.demian.service.impl.BookServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class AddBookAction extends Action {
+public class BookServiceImpl implements BookService {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-    private final BookService bookService = new BookServiceImpl();
+    private final BookDao bookDAO = new BookDaoImpl();
 
-    @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        return "/admin/addBook";
-    }
-
-    @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+    public void saveBook(HttpServletRequest request) {
         String name = request.getParameter("name");
         String author = request.getParameter("author");
         String publisher = request.getParameter("publisher");
@@ -36,7 +28,8 @@ public class AddBookAction extends Action {
         book.setPublishedDate(LocalDate.parse(publishedDate, formatter));
         book.setQuantity(Integer.parseInt(quantity));
 
-        bookService.save(book);
-        return "redirect:/catalog";
+        bookDAO.save(book);
     }
+
+
 }

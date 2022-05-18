@@ -166,11 +166,30 @@
                 <ul class="list-group list-group-flush">
                     <c:forEach var="book" items="${bookList}">
                         <li class="list-group-item">
-                            <i class="bi bi-book">${book.name}</i>&nbsp;
-                            <i class="bi bi-file-earmark-person">${book.author}</i>&nbsp;
-                            <i class="bi bi-briefcase">${book.publisher}</i>&nbsp;
-                            <i class="bi bi-calendar-date">${book.publishedDate}</i>&nbsp;
-                            <i class="bi bi-basket3">${book.quantity} in stock</i>
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1"><i class="bi bi-book">${book.name}</i></h5>
+                                <small><i class="bi bi-basket3">${book.quantity} in stock</i></small>
+                            </div>
+                            <p class="mb-1">
+                                <i class="bi bi-file-earmark-person">${book.author}</i>&nbsp;
+                                <i class="bi bi-briefcase">${book.publisher}</i>&nbsp;
+                                <i class="bi bi-calendar-date">${book.publishedDate}</i>
+                            </p>
+                            <small>
+                                <form class="form-inline" method="post" action="/jsp/reader/orderBook">
+                                    <input type="hidden" name="book_id" value="${book.id}">
+                                    <c:choose>
+                                        <c:when test="${book.quantity > 0}">
+                                            <button type="submit" class="btn btn-outline-primary"><fmt:message
+                                                    key="catalog_jsp.button.order"/></button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="submit" class="btn btn-outline-secondary" disabled><fmt:message
+                                                    key="catalog_jsp.button.order"/></button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </form>
+                            </small>
                         </li>
                     </c:forEach>
                 </ul>

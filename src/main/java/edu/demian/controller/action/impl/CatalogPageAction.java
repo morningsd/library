@@ -2,7 +2,7 @@ package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
-import edu.demian.model.dao.impl.BookDAO;
+import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ public class CatalogPageAction extends Action {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";
 
-    private final BookDAO bookDAO = new BookDAO();
+    private final BookDaoImpl bookDAO = new BookDaoImpl();
 
 
     @Override

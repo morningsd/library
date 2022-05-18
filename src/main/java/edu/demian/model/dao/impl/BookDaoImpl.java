@@ -1,7 +1,7 @@
 package edu.demian.model.dao.impl;
 
 import edu.demian.model.DBManager;
-import edu.demian.model.dao.DataAccessObject;
+import edu.demian.model.dao.BookDao;
 import edu.demian.model.entity.Book;
 import edu.demian.model.exception.DaoException;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookDAO implements DataAccessObject {
+public class BookDaoImpl implements BookDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
 
@@ -23,12 +23,12 @@ public class BookDAO implements DataAccessObject {
     private static final String SQL_BOOK_ACCOUNT_ID = "account_id";
 
     private static final String SQL_FIND_BOOK = "SELECT * FROM book WHERE id = ?";
-//    private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM book";
     private static final String SQL_SAVE_BOOK = "INSERT INTO book " +
             "(name, author, publisher, published_date, quantity, account_id) VALUES (?,?,?,?,?,?)";
     private static final String SQL_UPDATE_BOOK = "UPDATE book SET name=?, author=?, publisher=?, published_date=?, quantity=?, account_id=? WHERE id=?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM book WHERE id=?";
     private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM book ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT * FROM book WHERE id IN (SELECT id FROM reserve WHERE account_id=? AND is_active)";
     private static final String SQL_SEARCH_BOOK = "SELECT * FROM book WHERE %s ILIKE ? ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
 
     public Book find(Long id) {
@@ -59,6 +59,21 @@ public class BookDAO implements DataAccessObject {
             return toBookList(metaData, rs);
         } catch (SQLException e) {
             throw new DaoException("Can't find all books", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    public List<Book> findAllActiveForAccount(Long id) {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_BOOKS_FOR_ACCOUNT)) {
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            return toBookList(metaData, rs);
+        } catch (SQLException e) {
+            throw new DaoException("Can't find all books for account", e);
         } finally {
             DB_MANAGER_INSTANCE.close(rs);
         }
@@ -98,16 +113,8 @@ public class BookDAO implements DataAccessObject {
             } else {
                 pstmt.setLong(k, bookOwner);
             }
-            if (pstmt.executeUpdate() == 1) {
-                ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    Long id = rs.getLong(1);
-                    book.setId(id);
-                } else {
+            if (pstmt.executeUpdate() != 1) {
                     throw new DaoException("Can't save a book");
-                }
-            } else {
-                throw new DaoException("Can't save a book");
             }
         } catch (SQLException e) {
             throw new DaoException("Can't save a book", e);
@@ -196,5 +203,4 @@ public class BookDAO implements DataAccessObject {
         }
         return book;
     }
-
 }

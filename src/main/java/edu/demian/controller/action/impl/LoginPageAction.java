@@ -1,7 +1,7 @@
 package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
-import edu.demian.model.dao.impl.AccountDAO;
+import edu.demian.model.dao.impl.AccountDaoImpl;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Role;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 public class LoginPageAction extends Action {
 
-    private final AccountDAO accountDAO = new AccountDAO();
+    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
     @Override
     protected String doGet(HttpServletRequest request, HttpServletResponse response) {
         return "/login";
@@ -27,7 +27,7 @@ public class LoginPageAction extends Action {
         Account account = accountDAO.findByEmailAndPassword(email, password);
 
         if (account == null) {
-            String errorMessage = "Email or password is incorrect";
+            String errorMessage = "Email or password is incorrect or your account is blocked. Contact the admin to solve this issue";
             request.setAttribute("errorMessage", errorMessage);
             return "/error";
         }

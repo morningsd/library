@@ -2,7 +2,7 @@ package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
-import edu.demian.model.dao.impl.AccountDAO;
+import edu.demian.model.dao.impl.AccountDaoImpl;
 import edu.demian.model.entity.Account;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ManageAccountAction extends Action {
 
-    private final AccountDAO accountDAO = new AccountDAO();
+    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
 
     @Override
     protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {

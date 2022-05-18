@@ -3,15 +3,13 @@ package edu.demian.controller.action.impl;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.AccountDaoImpl;
-import edu.demian.service.AccountService;
-import edu.demian.service.impl.AccountServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BlockAccountAction extends Action {
+public class UnblockAccountAction extends Action {
 
-    private final AccountService accountService = new AccountServiceImpl();
+    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
 
     @Override
     protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {
@@ -22,7 +20,7 @@ public class BlockAccountAction extends Action {
     protected String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         String accountId = request.getParameter("account_id");
 
-        accountService.block(Long.parseLong(accountId));
+        accountDAO.unblock(Long.parseLong(accountId));
 
         return "redirect:/admin/manageAccounts";
     }

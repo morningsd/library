@@ -26,6 +26,7 @@ public class ActionFactory {
         actions.put("/admin/manageAccounts", new ManageAccountAction());
         actions.put("/admin/blockAccount", new BlockAccountAction());
         actions.put("/admin/unblockAccount", new UnblockAccountAction());
+        actions.put("/reader/orderBook", new OrderBookAction());
     }
 
     public static Action getAction(HttpServletRequest request) {

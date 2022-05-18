@@ -2,9 +2,8 @@ package edu.demian.model.dao.impl;
 
 import com.google.common.hash.Hashing;
 import edu.demian.model.DBManager;
-import edu.demian.model.dao.DataAccessObject;
+import edu.demian.model.dao.AccountDao;
 import edu.demian.model.entity.Account;
-import edu.demian.model.entity.Book;
 import edu.demian.model.exception.DaoException;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AccountDAO implements DataAccessObject {
+public class AccountDaoImpl implements AccountDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
 
@@ -31,6 +30,8 @@ public class AccountDAO implements DataAccessObject {
     private static final String SQL_FIND_ALL = "SELECT * FROM account";
     private static final String SQL_FIND_ALL_LIBRARIANS = "SELECT * FROM account WHERE role_id = (SELECT id FROM role WHERE name='LIBRARIAN')";
     private static final String SQL_DELETE_ACCOUNT = "DELETE FROM account WHERE id=?";
+    private static final String SQL_BLOCK_ACCOUNT = "UPDATE account SET is_blocked=TRUE WHERE id=?";
+    private static final String SQL_UNBLOCK_ACCOUNT = "UPDATE account SET is_blocked=FALSE WHERE id=?";
     private static final String SQL_INSERT_ACCOUNT = "INSERT INTO account " +
             "(first_name, last_name, email, password, is_admin, is_blocked, role_id) VALUES (?,?,?,?,?,?,?)";
 
@@ -96,7 +97,6 @@ public class AccountDAO implements DataAccessObject {
     }
 
 
-
     public void save(Account account, String password) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
                 PreparedStatement pstmt = connection.prepareStatement(SQL_INSERT_ACCOUNT, Statement.RETURN_GENERATED_KEYS)) {
@@ -118,15 +118,7 @@ public class AccountDAO implements DataAccessObject {
                 pstmt.setBoolean(k++, Boolean.FALSE);
             }
             pstmt.setInt(k, account.getRoleId());
-            if (pstmt.executeUpdate() == 1) {
-                ResultSet rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    long id = rs.getLong(1);
-                    account.setId(id);
-                } else {
-                    throw new DaoException("Can't save an account");
-                }
-            } else {
+            if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't save an account");
             }
         } catch (SQLException e) {
@@ -149,11 +141,23 @@ public class AccountDAO implements DataAccessObject {
 
 
     public void block(Long accountId) {
-
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+                PreparedStatement pstmt = connection.prepareStatement(SQL_BLOCK_ACCOUNT)) {
+            pstmt.setLong(1, accountId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Can't block an account", e);
+        }
     }
 
     public void unblock(Long accountId) {
-        
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_UNBLOCK_ACCOUNT)) {
+            pstmt.setLong(1, accountId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Can't unblock an account", e);
+        }
     }
 
     private String hashPassword(String passwordToHash) {
