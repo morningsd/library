@@ -4,21 +4,23 @@ import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.AccountDaoImpl;
 import edu.demian.model.entity.Account;
+import edu.demian.service.AccountService;
+import edu.demian.service.impl.AccountServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-public class ManageLibrariansAction extends Action {
+public final class ManageLibrariansAction extends Action {
 
-    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
+    private final AccountService accountService = new AccountServiceImpl();
 
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        HttpSession session = request.getSession();
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
+        final HttpSession session = request.getSession();
 
-        List<Account> librarianList = accountDAO.findAllLibrarians();
+        final List<Account> librarianList = accountService.findAllLibrarians();
 
         session.setAttribute("librarianList", librarianList);
 
@@ -26,7 +28,7 @@ public class ManageLibrariansAction extends Action {
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
         throw new UnsupportedOperationException("This url does not support POST method");
     }
 }

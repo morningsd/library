@@ -10,22 +10,23 @@ import edu.demian.service.impl.AccountServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AddLibrarianAction extends Action {
+public final class AddLibrarianAction extends Action {
 
     private final AccountService accountService = new AccountServiceImpl();
+
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
         return "/admin/addLibrarian";
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        String firstName = request.getParameter("fname");
-        String lastName = request.getParameter("lname");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
+        final String firstName = request.getParameter("fname");
+        final String lastName = request.getParameter("lname");
+        final String email = request.getParameter("email");
+        final String password = request.getParameter("password");
 
-        Account account = new Account();
+        final Account account = new Account();
         account.setFirstName(firstName);
         account.setLastName(lastName);
         account.setEmail(email);

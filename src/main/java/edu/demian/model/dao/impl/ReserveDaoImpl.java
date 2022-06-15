@@ -8,7 +8,7 @@ import edu.demian.model.exception.DaoException;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class ReserveDaoImpl implements ReserveDao {
+public final class ReserveDaoImpl implements ReserveDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
 
@@ -21,15 +21,15 @@ public class ReserveDaoImpl implements ReserveDao {
     private static final String SQL_INSERT_RESERVE = "INSERT INTO reserve(account_id, book_id) VALUES (?,?)";
 
 
-    public void save(Reserve reserve) {
+    public void save(final Reserve reserve) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_INSERT_RESERVE, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setLong(1, reserve.getAccountId());
             pstmt.setLong(2, reserve.getBookId());
             if (pstmt.executeUpdate() == 1) {
-                ResultSet rs = pstmt.getGeneratedKeys();
+                final ResultSet rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
-                    long id = rs.getLong(1);
+                    final long id = rs.getLong(1);
                     reserve.setId(id);
                 } else {
                     throw new DaoException("Can't save an order");
@@ -37,18 +37,18 @@ public class ReserveDaoImpl implements ReserveDao {
             } else {
                 throw new DaoException("Can't save an order");
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new DaoException("Can't save an order", e);
         }
     }
 
 
-    private Reserve toReserve(ResultSetMetaData metaData, ResultSet resultSet) throws SQLException {
+    private Reserve toReserve(final ResultSetMetaData metaData, final ResultSet resultSet) throws SQLException {
         if (!resultSet.next()) {
             return null;
         }
 
-        Reserve reserve = new Reserve();
+        final Reserve reserve = new Reserve();
 
         for (int i = 1; i <= metaData.getColumnCount(); i++) {
             switch (metaData.getColumnName(i)) {

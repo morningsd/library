@@ -2,8 +2,9 @@ package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
-import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
+import edu.demian.service.BookService;
+import edu.demian.service.impl.BookServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,34 +13,34 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-public class CatalogPageAction extends Action {
+public final class CatalogPageAction extends Action {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";
 
-    private final BookDaoImpl bookDAO = new BookDaoImpl();
+    private final BookService bookService = new BookServiceImpl();
 
 
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
+        final HttpSession session = request.getSession();
 
-        String requestNameOrder = request.getParameter("sort_name");
-        String requestAuthorOrder = request.getParameter("sort_author");
-        String requestPublisherOrder = request.getParameter("sort_publisher");
-        String requestPublishedDateOrder = request.getParameter("sort_date");
+        final String requestNameOrder = request.getParameter("sort_name");
+        final String requestAuthorOrder = request.getParameter("sort_author");
+        final String requestPublisherOrder = request.getParameter("sort_publisher");
+        final String requestPublishedDateOrder = request.getParameter("sort_date");
 
-        String searchData = request.getParameter("search_data");
-        String searchBy = request.getParameter("search_by");
+        final String searchData = request.getParameter("search_data");
+        final String searchBy = request.getParameter("search_by");
 
-        String nameOrder = (requestNameOrder == null) ? (String) getAttribute(session, "nameOrder", "catalog.sort.") : requestNameOrder;
-        String authorOrder = (requestAuthorOrder == null) ? (String) getAttribute(session, "authorOrder", "catalog.sort.") : requestAuthorOrder;
-        String publisherOrder = (requestPublisherOrder == null) ? (String) getAttribute(session, "publisherOrder", "catalog.sort.") : requestPublisherOrder;
-        String publisherDateOrder = (requestPublishedDateOrder == null) ? (String) getAttribute(session, "publishedDateOrder", "catalog.sort.") : requestPublishedDateOrder;
-        int limit = Integer.parseInt(getApplicationProperty("catalog.sort.limit"));
+        final String nameOrder = (requestNameOrder == null) ? (String) getAttribute(session, "nameOrder", "catalog.sort.") : requestNameOrder;
+        final String authorOrder = (requestAuthorOrder == null) ? (String) getAttribute(session, "authorOrder", "catalog.sort.") : requestAuthorOrder;
+        final String publisherOrder = (requestPublisherOrder == null) ? (String) getAttribute(session, "publisherOrder", "catalog.sort.") : requestPublisherOrder;
+        final String publisherDateOrder = (requestPublishedDateOrder == null) ? (String) getAttribute(session, "publishedDateOrder", "catalog.sort.") : requestPublishedDateOrder;
+        final int limit = Integer.parseInt(getApplicationProperty("catalog.sort.limit"));
 
-        String currentPage = (String) getAttribute(session, "currentPage", "catalog.sort.");
+        final String currentPage = (String) getAttribute(session, "currentPage", "catalog.sort.");
 
-        long offset = getOffset(Long.parseLong(currentPage), limit);
+        final long offset = getOffset(Long.parseLong(currentPage), limit);
 
         session.setAttribute("nameOrder", nameOrder);
         session.setAttribute("authorOrder", authorOrder);
@@ -52,9 +53,9 @@ public class CatalogPageAction extends Action {
 
         List<Book> bookList;
         if (searchData != null) {
-            bookList = bookDAO.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+            bookList = bookService.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
         } else {
-            bookList = bookDAO.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+            bookList = bookService.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
         }
 
         session.setAttribute("bookList", bookList);
@@ -62,19 +63,20 @@ public class CatalogPageAction extends Action {
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
         throw new UnsupportedOperationException("This url does not support POST method");
     }
 
-    private Object getAttribute(HttpSession session, String name, String propertyPrefix) {
-        Object userValue = session.getAttribute(name);
-        Object propertiesValue = getApplicationProperty(propertyPrefix + name);
+    // TODO refactor and move it to book service (mb as a static method)
+    private Object getAttribute(final HttpSession session, final String name, final String propertyPrefix) {
+        final Object userValue = session.getAttribute(name);
+        final Object propertiesValue = getApplicationProperty(propertyPrefix + name);
         return userValue == null ? propertiesValue : userValue;
     }
 
-    private String getApplicationProperty(String name) {
+    private String getApplicationProperty(final String name) {
         try {
-            Properties properties = new Properties();
+            final Properties properties = new Properties();
             properties.load(CatalogPageAction.class.getResourceAsStream(APPLICATION_PROPERTIES));
             return properties.getProperty(name);
         } catch (IOException e) {
@@ -82,7 +84,7 @@ public class CatalogPageAction extends Action {
         }
     }
 
-    private long getOffset(long currentPage, int limit) {
+    private long getOffset(final long currentPage, final int limit) {
         // curP = 1 ==> limit numOfRecords, offset 0 (curP - 1) * numOfRecords
         // curP = 2 ==> limit numOfRecords, offset 5 (curP - 1) * numOfRecords
         return (currentPage - 1) * limit;

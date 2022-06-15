@@ -2,13 +2,11 @@ package edu.demian.controller.action;
 
 public class ActionException extends RuntimeException {
 
-	private static final long serialVersionUID = 3146460392009050712L;
-
-	public ActionException(String message) {
+	public ActionException(final String message) {
 		super(message);
 	}
 	
-	public ActionException(String message, Throwable cause) {
+	public ActionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

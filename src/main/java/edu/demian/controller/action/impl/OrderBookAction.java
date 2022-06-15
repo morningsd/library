@@ -5,32 +5,34 @@ import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.ReserveDaoImpl;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Reserve;
+import edu.demian.service.ReserveService;
+import edu.demian.service.impl.ReserveServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class OrderBookAction extends Action {
+public final class OrderBookAction extends Action {
 
-    private final ReserveDaoImpl reserveDAO = new ReserveDaoImpl();
+    private final ReserveService reserveService = new ReserveServiceImpl();
 
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
         throw new UnsupportedOperationException("This url does not support GET method");
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
+        final HttpSession session = request.getSession();
+        final Account account = (Account) session.getAttribute("account");
 
-        String bookId = request.getParameter("book_id");
+        final String bookId = request.getParameter("book_id");
 
-        Reserve reserve = new Reserve();
+        final Reserve reserve = new Reserve();
         reserve.setAccountId(account.getId());
         reserve.setBookId(Long.parseLong(bookId));
 
-        reserveDAO.save(reserve);
+        reserveService.save(reserve);
 
         return "redirect:/cabinet";
     }

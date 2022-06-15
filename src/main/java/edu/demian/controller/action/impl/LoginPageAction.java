@@ -4,36 +4,40 @@ import edu.demian.controller.action.Action;
 import edu.demian.model.dao.impl.AccountDaoImpl;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Role;
+import edu.demian.service.AccountService;
+import edu.demian.service.impl.AccountServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class LoginPageAction extends Action {
+public final class LoginPageAction extends Action {
 
-    private final AccountDaoImpl accountDAO = new AccountDaoImpl();
+    private final AccountService accountService = new AccountServiceImpl();
+
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
         return "/login";
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
+        final HttpSession session = request.getSession();
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        final String email = request.getParameter("email");
+        final String password = request.getParameter("password");
 
-        Account account = accountDAO.findByEmailAndPassword(email, password);
+        final Account account = accountService.findByEmailAndPassword(email, password);
 
         if (account == null) {
-            String errorMessage = "Email or password is incorrect or your account is blocked. Contact the admin to solve this issue";
+            final String errorMessage = "Email or password is incorrect or your account is blocked. Contact the admin to solve this issue";
             request.setAttribute("errorMessage", errorMessage);
             return "/error";
         }
 
         session.setAttribute("account", account);
-        Role accountRole = Role.getRole(account);
+
+        final Role accountRole = Role.getRole(account);
         session.setAttribute("accountRole", accountRole);
         session.setAttribute("isAdmin", account.getAdmin());
 

@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DBManager {
+public final class DBManager {
 
     private static DBManager instance;
 
@@ -15,12 +15,12 @@ public class DBManager {
 
     private DBManager() {
         try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            final Context initContext = new InitialContext();
+            final Context envContext = (Context) initContext.lookup("java:/comp/env");
 
             dataSource = (DataSource) envContext.lookup("jdbc/library");
-        } catch (NamingException e) {
-            e.printStackTrace();
+        } catch (final NamingException e) {
+            throw new RuntimeException("Can't retrieve data source", e);
         }
     }
 
@@ -36,12 +36,12 @@ public class DBManager {
         try {
             con = dataSource.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Can't retrieve connection", e);
         }
         return con;
     }
 
-    public void close(AutoCloseable autoCloseable) {
+    public void close(final AutoCloseable autoCloseable) {
         if (autoCloseable != null) {
             try {
                 autoCloseable.close();
@@ -49,20 +49,20 @@ public class DBManager {
         }
     }
 
-    public void rollbackClose(Connection con) {
+    public void rollbackClose(final Connection connection) {
         try {
-            if (con != null) {
-                con.rollback();
-                con.close();
+            if (connection != null) {
+                connection.rollback();
+                connection.close();
             }
         } catch (SQLException ignored) {}
     }
 
-    public void commitClose(Connection con) {
+    public void commitClose(Connection connection) {
         try {
-            if (con != null) {
-                con.commit();
-                con.close();
+            if (connection != null) {
+                connection.commit();
+                connection.close();
             }
         } catch (SQLException ignored) {}
     }

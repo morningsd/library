@@ -5,15 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.demian.controller.action.Action;
 
-public class HomePageAction extends Action {
+public final class HomePageAction extends Action {
 
 	@Override
-	protected String doGet(HttpServletRequest request, HttpServletResponse response) {
+	protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
 		return "/home";
 	}
 
 	@Override
-	protected String doPost(HttpServletRequest request, HttpServletResponse response) {
+	protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
 		throw new UnsupportedOperationException("This url does not support POST method");
 	}
 

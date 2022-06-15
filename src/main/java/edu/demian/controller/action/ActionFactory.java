@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import edu.demian.controller.action.impl.*;
 
-public class ActionFactory {
+public final class ActionFactory {
 	
 	private static final Map<String, Action> actions = new HashMap<>();
 
@@ -29,7 +29,7 @@ public class ActionFactory {
         actions.put("/reader/orderBook", new OrderBookAction());
     }
 
-    public static Action getAction(HttpServletRequest request) {
+    public static Action getAction(final HttpServletRequest request) {
 		return actions.get(request.getPathInfo());
     }
 }

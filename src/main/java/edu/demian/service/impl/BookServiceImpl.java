@@ -5,31 +5,32 @@ import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
 import edu.demian.service.BookService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-public class BookServiceImpl implements BookService {
+public final class BookServiceImpl implements BookService {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
     private final BookDao bookDAO = new BookDaoImpl();
 
-    public void saveBook(HttpServletRequest request) {
-        String name = request.getParameter("name");
-        String author = request.getParameter("author");
-        String publisher = request.getParameter("publisher");
-        String publishedDate = request.getParameter("published_date");
-        String quantity = request.getParameter("quantity");
-
-        Book book = new Book();
-        book.setName(name);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
-        book.setPublishedDate(LocalDate.parse(publishedDate, formatter));
-        book.setQuantity(Integer.parseInt(quantity));
-
+    @Override
+    public void save(final Book book) {
         bookDAO.save(book);
     }
 
+    @Override
+    public List<Book> findAllForUser(final Long id) {
+        return bookDAO.findAllActiveForAccount(id);
+    }
+
+    @Override
+    public List<Book> searchAll(final String searchBy, final String searchData, final String nameOrder, final String authorOrder,
+                                final String publisherOrder, final String publisherDateOrder, final int limit, final long offset) {
+        return bookDAO.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+    }
+
+    @Override
+    public List<Book> findAll(final String nameOrder, final String authorOrder, final String publisherOrder, final String publisherDateOrder,
+                              final int limit, final long offset) {
+        return bookDAO.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+    }
 
 }

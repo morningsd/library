@@ -5,14 +5,14 @@ import edu.demian.controller.action.Action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ErrorPageAction extends Action {
+public final class ErrorPageAction extends Action {
     @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
         return "/error";
     }
 
     @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
         throw new UnsupportedOperationException("This url does not support POST method");
     }
 }

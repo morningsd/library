@@ -2,11 +2,11 @@ package edu.demian.model.exception;
 
 public class DaoException extends RuntimeException {
 
-    public DaoException(String message) {
+    public DaoException(final String message) {
         super(message);
     }
 
-    public DaoException(String message, Throwable cause) {
+    public DaoException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }
