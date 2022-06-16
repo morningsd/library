@@ -12,7 +12,7 @@ public interface BookDao {
 
     List<Book> findAllActiveForAccount(Long id);
 
-    List<Book> searchAll(String searchBy, String searchData,  String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset);
+    List<Book> searchAll(String searchBy, String searchData, String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset);
 
     Book save(Book book, Integer quantity);
 

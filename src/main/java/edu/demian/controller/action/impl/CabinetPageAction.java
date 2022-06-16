@@ -1,14 +1,10 @@
 package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
-import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Account;
-import edu.demian.model.entity.Book;
 import edu.demian.model.entity.Reserve;
 import edu.demian.model.entity.Role;
-import edu.demian.service.BookService;
 import edu.demian.service.ReserveService;
-import edu.demian.service.impl.BookServiceImpl;
 import edu.demian.service.impl.ReserveServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;

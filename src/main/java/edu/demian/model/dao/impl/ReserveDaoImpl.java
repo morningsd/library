@@ -3,7 +3,6 @@ package edu.demian.model.dao.impl;
 import edu.demian.model.DBManager;
 import edu.demian.model.dao.BookDao;
 import edu.demian.model.dao.ReserveDao;
-import edu.demian.model.entity.Book;
 import edu.demian.model.entity.Reserve;
 import edu.demian.model.exception.DaoException;
 

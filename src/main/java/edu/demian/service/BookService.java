@@ -2,7 +2,6 @@ package edu.demian.service;
 
 import edu.demian.model.entity.Book;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface BookService {
