@@ -31,9 +31,9 @@ public final class BookDaoImpl implements BookDao {
             "(name, author, publisher, published_date) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE_BOOK = "UPDATE book SET name=?, author=?, publisher=?, published_date=?, status_id=? WHERE id=?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM book WHERE id=?";
-    private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM book ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
-    private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT * FROM book WHERE id IN (SELECT book_id FROM reserve WHERE account_id=? AND is_active)";
-    private static final String SQL_SEARCH_BOOK = "SELECT * FROM book WHERE %s ILIKE ? ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL_BOOKS = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE b1.id IN (SELECT book_id FROM reserve WHERE account_id=? AND is_active)";
+    private static final String SQL_SEARCH_BOOK = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE %s ILIKE ? ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
 
     public Book find(final Long id) {
         ResultSet rs = null;
@@ -63,7 +63,7 @@ public final class BookDaoImpl implements BookDao {
             pstmt.setString(k++, book.getName());
             pstmt.setString(k++, book.getAuthor());
             pstmt.setString(k++, book.getPublisher());
-            pstmt.setObject(k++, book.getPublishedDate());
+            pstmt.setObject(k, book.getPublishedDate());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 book.setId(rs.getLong(SQL_UNIQUE_BOOK_ID));
@@ -90,6 +90,20 @@ public final class BookDaoImpl implements BookDao {
         }
         return book;
     }
+
+
+    public void delete(final Long id) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_DELETE_BOOK)) {
+            pstmt.setLong(1, id);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't delete a book");
+            }
+        } catch (final SQLException e) {
+            throw new DaoException("Can't delete a book", e);
+        }
+    }
+
 
     public List<Book> findAll(final String nameOrder, final String authorOrder, final String publisherOrder, final String publishedDateOrder, final int limit, final long offset) {
         final String formattedQuery = String.format(SQL_FIND_ALL_BOOKS, nameOrder, authorOrder, publisherOrder, publishedDateOrder);
@@ -143,6 +157,7 @@ public final class BookDaoImpl implements BookDao {
     }
 
 
+    //TODO
     public void update(final Book book) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
                 PreparedStatement pstmt = connection.prepareStatement(SQL_UPDATE_BOOK)) {
@@ -163,18 +178,6 @@ public final class BookDaoImpl implements BookDao {
         }
     }
 
-
-    public void delete(final Long id) {
-        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
-                PreparedStatement pstmt = connection.prepareStatement(SQL_DELETE_BOOK)) {
-            pstmt.setLong(1, id);
-            if (pstmt.executeUpdate() != 1) {
-                throw new DaoException("Can't delete a book");
-            }
-        } catch (final SQLException e) {
-            throw new DaoException("Can't delete a book", e);
-        }
-    }
 
     private List<Book> toBookList(final ResultSetMetaData metaData, final ResultSet resultSet) throws SQLException {
         final List<Book> bookList = new LinkedList<>();
