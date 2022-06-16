@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookService {
 
-    void save(Book book);
+    Book save(Book book, Integer quantity);
 
     List<Book> findAllForUser(Long id);
 

@@ -183,6 +183,11 @@
                                             <button type="submit" class="btn btn-outline-primary"><fmt:message
                                                     key="catalog_jsp.button.order"/></button>
                                         </c:when>
+                                        <c:when test="${fnc:contains(accountBookList, book)}}">
+                                            <button type="submit" class="btn btn-outline-secondary" disabled><fmt:message
+                                                    key="catalog_jsp.button.order"/></button>
+                                            <small>You already have this book in your cabinet</small>
+                                        </c:when>
                                         <c:otherwise>
                                             <button type="submit" class="btn btn-outline-secondary" disabled><fmt:message
                                                     key="catalog_jsp.button.order"/></button>

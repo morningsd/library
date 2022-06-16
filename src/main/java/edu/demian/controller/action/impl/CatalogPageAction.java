@@ -2,6 +2,7 @@ package edu.demian.controller.action.impl;
 
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
+import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Book;
 import edu.demian.service.BookService;
 import edu.demian.service.impl.BookServiceImpl;
@@ -59,6 +60,15 @@ public final class CatalogPageAction extends Action {
         }
 
         session.setAttribute("bookList", bookList);
+
+
+        Account account = (Account) session.getAttribute("account");
+        List<Book> accountBookList = null;
+        if (account != null) {
+            accountBookList = bookService.findAllForUser(account.getId());
+        }
+        session.setAttribute("accountBookList", accountBookList);
+
         return "/catalog";
     }
 

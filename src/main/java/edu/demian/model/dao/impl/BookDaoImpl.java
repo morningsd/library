@@ -19,16 +19,18 @@ public final class BookDaoImpl implements BookDao {
     private static final String SQL_BOOK_AUTHOR = "author";
     private static final String SQL_BOOK_PUBLISHER = "publisher";
     private static final String SQL_BOOK_PUBLISHED_DATE = "published_date";
-    private static final String SQL_BOOK_QUANTITY = "quantity";
-    private static final String SQL_BOOK_ACCOUNT_ID = "account_id";
+    private static final String SQL_BOOK_STATUS_ID = "status_id";
+//    private static final String SQL_BOOK_ACCOUNT_ID = "account_id";
+
 
     private static final String SQL_FIND_BOOK = "SELECT * FROM book WHERE id = ?";
     private static final String SQL_SAVE_BOOK = "INSERT INTO book " +
-            "(name, author, publisher, published_date, quantity, account_id) VALUES (?,?,?,?,?,?)";
-    private static final String SQL_UPDATE_BOOK = "UPDATE book SET name=?, author=?, publisher=?, published_date=?, quantity=?, account_id=? WHERE id=?";
+            "(name, author, publisher, published_date, status_id) VALUES (?,?,?,?,?)";
+    private static final String SQL_SAVE_BOOK_TO_CATALOG = "INSERT INTO catalog (book_id, quantity) VALUES (?,?)";
+    private static final String SQL_UPDATE_BOOK = "UPDATE book SET name=?, author=?, publisher=?, published_date=?, status_id=? WHERE id=?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM book WHERE id=?";
     private static final String SQL_FIND_ALL_BOOKS = "SELECT * FROM book ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
-    private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT * FROM book WHERE id IN (SELECT id FROM reserve WHERE account_id=? AND is_active)";
+    private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT * FROM book WHERE id IN (SELECT book_id FROM reserve WHERE account_id=? AND is_active)";
     private static final String SQL_SEARCH_BOOK = "SELECT * FROM book WHERE %s ILIKE ? ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
 
     public Book find(final Long id) {
@@ -99,27 +101,44 @@ public final class BookDaoImpl implements BookDao {
     }
 
 
-    public void save(final Book book) {
-        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
-                PreparedStatement pstmt = connection.prepareStatement(SQL_SAVE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
+    public Book save(final Book book, final Integer quantity) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        PreparedStatement pstmt2 = null;
+        ResultSet rs = null;
+        try {
+            connection = DB_MANAGER_INSTANCE.getConnection();
+            connection.setAutoCommit(false);
+            pstmt = connection.prepareStatement(SQL_SAVE_BOOK, Statement.RETURN_GENERATED_KEYS);
             int k = 1;
             pstmt.setString(k++, book.getName());
             pstmt.setString(k++, book.getAuthor());
             pstmt.setString(k++, book.getPublisher());
             pstmt.setObject(k++, book.getPublishedDate());
-            pstmt.setInt(k++, book.getQuantity());
-            final Long bookOwner = book.getAccountId();
-            if (bookOwner == null) {
-                pstmt.setNull(k, Types.BIGINT);
+            pstmt.setInt(k, book.getStatusId());
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                book.setId(rs.getLong(SQL_BOOK_ID));
             } else {
-                pstmt.setLong(k, bookOwner);
-            }
-            if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't save a book");
             }
+            pstmt2 = connection.prepareStatement(SQL_SAVE_BOOK_TO_CATALOG);
+            pstmt2.setLong(1, book.getId());
+            pstmt2.setInt(2, quantity);
+            if (pstmt2.executeUpdate() != 1) {
+                throw new DaoException("Can't save a book to the catalog");
+            }
+            DB_MANAGER_INSTANCE.commit(connection);
         } catch (final SQLException e) {
+            DB_MANAGER_INSTANCE.rollback(connection);
             throw new DaoException("Can't save a book", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+            DB_MANAGER_INSTANCE.close(pstmt2);
+            DB_MANAGER_INSTANCE.close(pstmt);
+            DB_MANAGER_INSTANCE.close(connection);
         }
+        return book;
     }
 
     public void update(final Book book) {
@@ -130,8 +149,9 @@ public final class BookDaoImpl implements BookDao {
             pstmt.setString(k++, book.getAuthor());
             pstmt.setString(k++, book.getPublisher());
             pstmt.setObject(k++, book.getPublishedDate());
-            pstmt.setInt(k++, book.getQuantity());
-            pstmt.setLong(k++, book.getAccountId());
+            pstmt.setInt(k++, book.getStatusId());
+//            pstmt.setInt(k++, book.getQuantity());
+//            pstmt.setLong(k++, book.getAccountId());
             pstmt.setLong(k, book.getId());
             if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't update a book");
@@ -192,12 +212,15 @@ public final class BookDaoImpl implements BookDao {
                 case SQL_BOOK_PUBLISHED_DATE:
                     book.setPublishedDate(resultSet.getObject(i, LocalDate.class));
                     break;
-                case SQL_BOOK_QUANTITY:
-                    book.setQuantity(resultSet.getInt(i));
+                case SQL_BOOK_STATUS_ID:
+                    book.setStatusId(resultSet.getInt(i));
                     break;
-                case SQL_BOOK_ACCOUNT_ID:
-                    book.setAccountId(resultSet.getLong(i));
-                    break;
+//                case SQL_BOOK_QUANTITY:
+//                    book.setQuantity(resultSet.getInt(i));
+//                    break;
+//                case SQL_BOOK_ACCOUNT_ID:
+//                    book.setAccountId(resultSet.getLong(i));
+//                    break;
                 default:
                     // No operations
             }

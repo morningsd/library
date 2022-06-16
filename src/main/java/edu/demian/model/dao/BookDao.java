@@ -14,7 +14,7 @@ public interface BookDao {
 
     List<Book> searchAll(String searchBy, String searchData,  String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset);
 
-    void save(Book book);
+    Book save(Book book, Integer quantity);
 
     void update(Book book);
 

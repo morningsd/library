@@ -9,28 +9,28 @@ import java.util.List;
 
 public final class BookServiceImpl implements BookService {
 
-    private final BookDao bookDAO = new BookDaoImpl();
+    private final BookDao bookDao = new BookDaoImpl();
 
     @Override
-    public void save(final Book book) {
-        bookDAO.save(book);
+    public Book save(final Book book, final Integer quantity) {
+        return bookDao.save(book, quantity);
     }
 
     @Override
     public List<Book> findAllForUser(final Long id) {
-        return bookDAO.findAllActiveForAccount(id);
+        return bookDao.findAllActiveForAccount(id);
     }
 
     @Override
     public List<Book> searchAll(final String searchBy, final String searchData, final String nameOrder, final String authorOrder,
                                 final String publisherOrder, final String publisherDateOrder, final int limit, final long offset) {
-        return bookDAO.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        return bookDao.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
     }
 
     @Override
     public List<Book> findAll(final String nameOrder, final String authorOrder, final String publisherOrder, final String publisherDateOrder,
                               final int limit, final long offset) {
-        return bookDAO.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        return bookDao.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
     }
 
 }

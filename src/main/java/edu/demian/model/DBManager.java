@@ -32,13 +32,13 @@ public final class DBManager {
     }
 
     public Connection getConnection() {
-        Connection con = null;
+        Connection connection = null;
         try {
-            con = dataSource.getConnection();
+            connection = dataSource.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException("Can't retrieve connection", e);
         }
-        return con;
+        return connection;
     }
 
     public void close(final AutoCloseable autoCloseable) {
@@ -49,20 +49,18 @@ public final class DBManager {
         }
     }
 
-    public void rollbackClose(final Connection connection) {
+    public void rollback(final Connection connection) {
         try {
             if (connection != null) {
                 connection.rollback();
-                connection.close();
             }
         } catch (SQLException ignored) {}
     }
 
-    public void commitClose(Connection connection) {
+    public void commit(Connection connection) {
         try {
             if (connection != null) {
                 connection.commit();
-                connection.close();
             }
         } catch (SQLException ignored) {}
     }

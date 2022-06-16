@@ -7,16 +7,10 @@ public class Book implements BaseEntity {
     private Long id;
 
     private String name;
-
     private String author;
-
     private String publisher;
-
     private LocalDate publishedDate;
-
-    private Integer quantity;
-
-    private Long accountId;
+    private Integer statusId;
 
     @Override
     public Long getId() {
@@ -59,20 +53,12 @@ public class Book implements BaseEntity {
         this.publishedDate = publishedDate;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getStatusId() {
+        return statusId;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
     }
 
     @Override
@@ -83,9 +69,7 @@ public class Book implements BaseEntity {
                 ", author='" + author + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", publishedDate=" + publishedDate +
-                ", quantity=" + quantity +
-                ", accountId=" + accountId +
+                ", statusId=" + statusId +
                 '}';
     }
-
 }

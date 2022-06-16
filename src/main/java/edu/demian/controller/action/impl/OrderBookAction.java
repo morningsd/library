@@ -11,6 +11,7 @@ import edu.demian.service.impl.ReserveServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 
 public final class OrderBookAction extends Action {
 
@@ -31,6 +32,7 @@ public final class OrderBookAction extends Action {
         final Reserve reserve = new Reserve();
         reserve.setAccountId(account.getId());
         reserve.setBookId(Long.parseLong(bookId));
+        reserve.setFinalDate(LocalDate.now().plusMonths(1));
 
         reserveService.save(reserve);
 

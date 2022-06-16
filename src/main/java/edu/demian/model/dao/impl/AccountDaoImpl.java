@@ -4,6 +4,7 @@ import com.google.common.hash.Hashing;
 import edu.demian.model.DBManager;
 import edu.demian.model.dao.AccountDao;
 import edu.demian.model.entity.Account;
+import edu.demian.model.entity.Role;
 import edu.demian.model.exception.DaoException;
 
 import java.nio.charset.StandardCharsets;
@@ -117,7 +118,12 @@ public final class AccountDaoImpl implements AccountDao {
             } else {
                 pstmt.setBoolean(k++, Boolean.FALSE);
             }
-            pstmt.setInt(k, account.getRoleId());
+            final Integer roleId = account.getRoleId();
+            if (roleId != null) {
+                pstmt.setInt(k, roleId);
+            } else {
+                pstmt.setInt(k, Role.READER.ordinal());
+            }
             if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't save an account");
             }

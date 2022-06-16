@@ -1,5 +1,6 @@
 package edu.demian.model.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Reserve implements BaseEntity {
@@ -8,7 +9,11 @@ public class Reserve implements BaseEntity {
     private Long accountId;
     private Long bookId;
     private LocalDate createdDate;
+    private LocalDate finalDate;
     private Boolean isActive;
+    private BigDecimal fine;
+
+    private Book book;
 
     @Override
     public Long getId() {
@@ -43,12 +48,36 @@ public class Reserve implements BaseEntity {
         this.createdDate = createdDate;
     }
 
+    public LocalDate getFinalDate() {
+        return finalDate;
+    }
+
+    public void setFinalDate(LocalDate finalDate) {
+        this.finalDate = finalDate;
+    }
+
     public Boolean getActive() {
         return isActive;
     }
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public BigDecimal getFine() {
+        return fine;
+    }
+
+    public void setFine(BigDecimal fine) {
+        this.fine = fine;
     }
 
     @Override
@@ -58,7 +87,9 @@ public class Reserve implements BaseEntity {
                 ", accountId=" + accountId +
                 ", bookId=" + bookId +
                 ", createdDate=" + createdDate +
+                ", finalDate=" + finalDate +
                 ", isActive=" + isActive +
+                ", fine=" + fine +
                 '}';
     }
 }

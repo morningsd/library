@@ -5,25 +5,33 @@
 <body>
 <div class="container">
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
+    <h3 class="text-center">${account.firstName} ${account.lastName} (email: ${account.email}) ${accountRole}</h3>
     <c:if test="${accountRole eq 'READER'}">
         <c:choose>
-            <c:when test="${empty bookList}">
+            <c:when test="${empty reserveList}">
                 <div class="text-center">
                     <h2>You have not ordered any books yet</h2>
                 </div>
             </c:when>
             <c:otherwise>
                 <ul class="list-group list-group-flush">
-                    <c:forEach var="book" items="${bookList}">
+                    <c:forEach var="reserve" items="${reserveList}">
                         <li class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1"><i class="bi bi-book">${book.name}</i></h5>
+                                <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>
+                                <i class="bi bi-basket3">Created date: ${reserve.createdDate}</i>
                             </div>
-                            <p class="mb-1">
-                                <i class="bi bi-file-earmark-person">${book.author}</i>&nbsp;
-                                <i class="bi bi-briefcase">${book.publisher}</i>&nbsp;
-                                <i class="bi bi-calendar-date">${book.publishedDate}</i>
-                            </p>
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1">
+                                    <i class="bi bi-file-earmark-person">${reserve.book.author}</i>&nbsp;
+                                    <i class="bi bi-briefcase">${reserve.book.publisher}</i>&nbsp;
+                                    <i class="bi bi-calendar-date">${reserve.book.publishedDate}</i>
+                                </p>
+                                <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">
+                                    <i class="bi bi-basket3">Fine: <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>
+                                </c:if>
+                                <i class="bi bi-basket3">Final date: ${reserve.finalDate}</i>
+                            </div>
                         </li>
                     </c:forEach>
                 </ul>
