@@ -8,5 +8,9 @@ public interface ReserveService {
 
     void save(Reserve reserve);
 
+    List<Reserve> findAllActiveForUser(Long id);
+
     List<Reserve> findAllForUser(Long id);
+
+    List<Reserve> findAllActive();
 }

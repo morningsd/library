@@ -179,7 +179,7 @@
                                 <form class="form-inline" method="post" action="/jsp/reader/orderBook">
                                     <input type="hidden" name="book_id" value="${book.id}">
                                     <c:choose>
-                                        <c:when test="${book.quantity > 0}">
+                                        <c:when test="${book.quantity > 0 and not empty account}">
                                             <button type="submit" class="btn btn-outline-primary"><fmt:message
                                                     key="catalog_jsp.button.order"/></button>
                                         </c:when>

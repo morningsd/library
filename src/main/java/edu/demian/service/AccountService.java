@@ -18,7 +18,11 @@ public interface AccountService {
 
     List<Account> findAllLibrarians();
 
+    List<Account> findAllReaders();
+
     void save(Account account, String password);
 
     void unblock(Long id);
+
+    Account find(Long id);
 }

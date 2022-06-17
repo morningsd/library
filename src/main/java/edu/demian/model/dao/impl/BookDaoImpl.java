@@ -3,6 +3,7 @@ package edu.demian.model.dao.impl;
 import edu.demian.model.DBManager;
 import edu.demian.model.dao.BookDao;
 import edu.demian.model.entity.Book;
+import edu.demian.model.entity.BookStatus;
 import edu.demian.model.exception.DaoException;
 
 import java.sql.*;
@@ -19,21 +20,25 @@ public final class BookDaoImpl implements BookDao {
     private static final String SQL_UNIQUE_BOOK_AUTHOR = "author";
     private static final String SQL_UNIQUE_BOOK_PUBLISHER = "publisher";
     private static final String SQL_UNIQUE_BOOK_PUBLISHED_DATE = "published_date";
+    private static final String SQL_BOOK_QUANTITY = "quantity";
 
     private static final String SQL_BOOK_ID = "id";
     private static final String SQL_BOOK_UNIQUE_ID = "book_id";
     private static final String SQL_BOOK_STATUS_ID = "status_id";
 
 
-    private static final String SQL_FIND_BOOK = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date, b1.status_id FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id";
+    private static final String SQL_FIND_BOOK = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date, b1.status_id FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE b1.id=?";
+
+    private static final String SQL_FIND_BOOK_IN_STOCK = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date, b1.status_id FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE b1.id=((SELECT id FROM book WHERE book_id=? AND status_id=1 LIMIT 1))";
     private static final String SQL_SAVE_BOOK = "INSERT INTO book (book_id, status_id) VALUES (?, ?)";
     private static final String SQL_SAVE_UNIQUE_BOOK = "INSERT INTO unique_book " +
             "(name, author, publisher, published_date) VALUES (?,?,?,?)";
     private static final String SQL_UPDATE_BOOK = "UPDATE book SET name=?, author=?, publisher=?, published_date=?, status_id=? WHERE id=?";
     private static final String SQL_DELETE_BOOK = "DELETE FROM book WHERE id=?";
-    private static final String SQL_FIND_ALL_BOOKS = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
+    private static final String SQL_FIND_ALL_BOOKS = "SELECT b.*, (SELECT COUNT(id) FROM book WHERE book_id=b.id AND status_id=1) as quantity FROM unique_book b ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
     private static final String SQL_FIND_ALL_BOOKS_FOR_ACCOUNT = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE b1.id IN (SELECT book_id FROM reserve WHERE account_id=? AND is_active)";
     private static final String SQL_SEARCH_BOOK = "SELECT b1.id, b2.name, b2.author, b2.publisher, b2.published_date FROM book b1 JOIN unique_book b2 ON b1.book_id = b2.id WHERE %s ILIKE ? ORDER BY name %s, author %s, publisher %s, published_date %s LIMIT ? OFFSET ?";
+    private static final String SQL_UPDATE_STATUS = "UPDATE book SET status_id=? WHERE id=?";
 
     public Book find(final Long id) {
         ResultSet rs = null;
@@ -45,6 +50,21 @@ public final class BookDaoImpl implements BookDao {
             return toBook(metaData, rs);
         } catch (final SQLException e) {
             throw new DaoException("Can't find a book", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    public Book findInStock(final Long uniqueBookId) {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_BOOK_IN_STOCK)) {
+            pstmt.setLong(1, uniqueBookId);
+            rs = pstmt.executeQuery();
+            final ResultSetMetaData metaData = pstmt.getMetaData();
+            return toBook(metaData, rs);
+        } catch (final SQLException e) {
+            throw new DaoException("Can't find a book in stock", e);
         } finally {
             DB_MANAGER_INSTANCE.close(rs);
         }
@@ -64,11 +84,17 @@ public final class BookDaoImpl implements BookDao {
             pstmt.setString(k++, book.getAuthor());
             pstmt.setString(k++, book.getPublisher());
             pstmt.setObject(k, book.getPublishedDate());
-            rs = pstmt.executeQuery();
-            if (rs.next()) {
-                book.setId(rs.getLong(SQL_UNIQUE_BOOK_ID));
-            } else {
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
                 throw new DaoException("Can't save a book");
+            }
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    book.setId(generatedKeys.getLong(SQL_UNIQUE_BOOK_ID));
+                }
+                else {
+                    throw new DaoException("Can't save a book");
+                }
             }
 
             pstmt2 = connection.prepareStatement(SQL_SAVE_BOOK);
@@ -101,6 +127,20 @@ public final class BookDaoImpl implements BookDao {
             }
         } catch (final SQLException e) {
             throw new DaoException("Can't delete a book", e);
+        }
+    }
+
+    @Override
+    public void setStatus(Long bookId, Integer statusId) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_UPDATE_STATUS)) {
+            pstmt.setInt(1, statusId);
+            pstmt.setLong(2, bookId);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't update book status");
+            }
+        } catch (final SQLException e) {
+            throw new DaoException("Can't update book status", e);
         }
     }
 
@@ -193,37 +233,6 @@ public final class BookDaoImpl implements BookDao {
         return bookList;
     }
 
-//    private Book toUniqueBook(final ResultSetMetaData metaData, final ResultSet resultSet) throws SQLException {
-//        if (!resultSet.next()) {
-//            return null;
-//        }
-//
-//        final Book uniqueBook = new Book();
-//
-//        for (int i = 1; i <= metaData.getColumnCount(); i++) {
-//            switch (metaData.getColumnName(i)) {
-//                case SQL_UNIQUE_BOOK_ID:
-//                    uniqueBook.setId(resultSet.getLong(i));
-//                    break;
-//                case SQL_UNIQUE_BOOK_NAME:
-//                    uniqueBook.setName(resultSet.getString(i));
-//                    break;
-//                case SQL_UNIQUE_BOOK_AUTHOR:
-//                    uniqueBook.setAuthor(resultSet.getString(i));
-//                    break;
-//                case SQL_UNIQUE_BOOK_PUBLISHER:
-//                    uniqueBook.setPublisher(resultSet.getString(i));
-//                    break;
-//                case SQL_UNIQUE_BOOK_PUBLISHED_DATE:
-//                    uniqueBook.setPublishedDate(resultSet.getObject(i, LocalDate.class));
-//                    break;
-//                default:
-//                    // No operations
-//            }
-//        }
-//        return uniqueBook;
-//    }
-
 
     private Book toBook(final ResultSetMetaData metaData, final ResultSet resultSet) throws SQLException {
         if (!resultSet.next()) {
@@ -250,7 +259,12 @@ public final class BookDaoImpl implements BookDao {
                     book.setPublishedDate(resultSet.getObject(i, LocalDate.class));
                     break;
                 case SQL_BOOK_STATUS_ID:
-                    book.setStatusId(resultSet.getInt(i));
+                    final Integer statusId = resultSet.getInt(i);
+                    book.setStatusId(statusId);
+                    book.setStatus(BookStatus.getBookStatus(statusId));
+                    break;
+                case SQL_BOOK_QUANTITY:
+                    book.setQuantity(resultSet.getInt(i));
                     break;
                 default:
                     // No operations

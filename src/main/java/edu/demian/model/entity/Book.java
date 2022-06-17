@@ -11,6 +11,9 @@ public class Book implements BaseEntity {
     private String publisher;
     private LocalDate publishedDate;
     private Integer statusId;
+    private Integer quantity;
+
+    private BookStatus status;
 
     @Override
     public Long getId() {
@@ -59,6 +62,22 @@ public class Book implements BaseEntity {
 
     public void setStatusId(Integer statusId) {
         this.statusId = statusId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public BookStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
     }
 
     @Override

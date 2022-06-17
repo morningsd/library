@@ -30,6 +30,7 @@ public final class AccountDaoImpl implements AccountDao {
             " AND password=? AND is_blocked=FALSE";
     private static final String SQL_FIND_ALL = "SELECT * FROM account";
     private static final String SQL_FIND_ALL_LIBRARIANS = "SELECT * FROM account WHERE role_id = (SELECT id FROM role WHERE name='LIBRARIAN')";
+    private static final String SQL_FIND_ALL_READERS = "SELECT * FROM account WHERE role_id = (SELECT id FROM role WHERE name='READER')";
     private static final String SQL_DELETE_ACCOUNT = "DELETE FROM account WHERE id=?";
     private static final String SQL_BLOCK_ACCOUNT = "UPDATE account SET is_blocked=TRUE WHERE id=?";
     private static final String SQL_UNBLOCK_ACCOUNT = "UPDATE account SET is_blocked=FALSE WHERE id=?";
@@ -92,6 +93,21 @@ public final class AccountDaoImpl implements AccountDao {
             return toAccountList(metaData, rs);
         } catch (final SQLException e) {
             throw new DaoException("Can't find all librarians", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    @Override
+    public List<Account> findAllReaders() {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_READERS)) {
+            rs = pstmt.executeQuery();
+            final ResultSetMetaData metaData = rs.getMetaData();
+            return toAccountList(metaData, rs);
+        } catch (final SQLException e) {
+            throw new DaoException("Can't find all readers", e);
         } finally {
             DB_MANAGER_INSTANCE.close(rs);
         }

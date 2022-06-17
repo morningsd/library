@@ -1,6 +1,7 @@
 package edu.demian.service;
 
 import edu.demian.model.entity.Book;
+import edu.demian.model.entity.BookStatus;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface BookService {
     List<Book> searchAll(String searchBy, String searchData, String nameOrder, String authorOrder, String publisherOrder, String publisherDateOrder, int limit, long offset);
 
     List<Book> findAll(String nameOrder, String authorOrder, String publisherOrder, String publisherDateOrder, int limit, long offset);
+
+    void setStatus(Long bookId, Integer statusId);
 }

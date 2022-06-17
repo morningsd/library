@@ -1,8 +1,10 @@
 package edu.demian.model.dao.impl;
 
 import edu.demian.model.DBManager;
+import edu.demian.model.dao.AccountDao;
 import edu.demian.model.dao.BookDao;
 import edu.demian.model.dao.ReserveDao;
+import edu.demian.model.entity.Book;
 import edu.demian.model.entity.Reserve;
 import edu.demian.model.exception.DaoException;
 
@@ -15,6 +17,7 @@ public final class ReserveDaoImpl implements ReserveDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
     private final BookDao bookDao = new BookDaoImpl();
+    private final AccountDao accountDao = new AccountDaoImpl();
 
     private static final String SQL_RESERVE_ID = "id";
     private static final String SQL_RESERVE_ACCOUNT_ID = "account_id";
@@ -22,10 +25,13 @@ public final class ReserveDaoImpl implements ReserveDao {
     private static final String SQL_RESERVE_CREATED_DATE = "created_date";
     private static final String SQL_RESERVE_FINAL_DATE = "final_date";
     private static final String SQL_RESERVE_IS_ACTIVE = "is_active";
+    private static final String SQL_RESERVE_SUBMITTED_DATE = "submitted_date";
 
     private static final String SQL_INSERT_RESERVE = "INSERT INTO reserve(account_id, book_id, final_date) VALUES (?,?,?)";
-    private static final String SQL_DECREMENT_BOOK_QUANTITY = "UPDATE book SET quantity=(quantity-1) WHERE id=?";
+    private static final String SQL_RESERVE_BOOK = "UPDATE book SET status_id=2 WHERE id=?";
     private static final String SQL_FIND_ALL_ACTIVE_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=? AND is_active";
+    private static final String SQL_FIND_ALL_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=?";
+    private static final String SQL_FIND_ALL_ACTIVE = "SELECT * FROM reserve WHERE is_active";
 
 
     public void save(final Reserve reserve) {
@@ -34,6 +40,9 @@ public final class ReserveDaoImpl implements ReserveDao {
         PreparedStatement pstmt2 = null;
         ResultSet rs = null;
         try {
+            Book book = bookDao.findInStock(reserve.getBookId());
+            reserve.setBookId(book.getId());
+
             connection = DB_MANAGER_INSTANCE.getConnection();
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(SQL_INSERT_RESERVE, Statement.RETURN_GENERATED_KEYS);
@@ -51,10 +60,10 @@ public final class ReserveDaoImpl implements ReserveDao {
             } else {
                 throw new DaoException("Can't save an order");
             }
-            pstmt2 = connection.prepareStatement(SQL_DECREMENT_BOOK_QUANTITY);
+            pstmt2 = connection.prepareStatement(SQL_RESERVE_BOOK);
             pstmt2.setLong(1, reserve.getBookId());
             if (pstmt2.executeUpdate() != 1) {
-                throw new DaoException("Can't update a book");
+                throw new DaoException("Can't save an order");
             }
             DB_MANAGER_INSTANCE.commit(connection);
         } catch (final SQLException e) {
@@ -69,7 +78,7 @@ public final class ReserveDaoImpl implements ReserveDao {
     }
 
     @Override
-    public List<Reserve> findAllForUser(Long id) {
+    public List<Reserve> findAllActiveForUser(Long id) {
         ResultSet rs = null;
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_ACTIVE_RESERVES_FOR_ACCOUNT)) {
@@ -78,7 +87,39 @@ public final class ReserveDaoImpl implements ReserveDao {
             final ResultSetMetaData metaData = rs.getMetaData();
             return toReserveList(metaData, rs);
         } catch (final SQLException e) {
+            throw new DaoException("Can't find all active reserves for account", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+
+    @Override
+    public List<Reserve> findAllForUser(Long id) {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_RESERVES_FOR_ACCOUNT)) {
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+            final ResultSetMetaData metaData = rs.getMetaData();
+            return toReserveList(metaData, rs);
+        } catch (final SQLException e) {
             throw new DaoException("Can't find all reserves for account", e);
+        } finally {
+            DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    @Override
+    public List<Reserve> findAllActive() {
+        ResultSet rs = null;
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_ACTIVE)) {
+            rs = pstmt.executeQuery();
+            final ResultSetMetaData metaData = rs.getMetaData();
+            return toReserveList(metaData, rs);
+        } catch (final SQLException e) {
+            throw new DaoException("Can't find all active reserves", e);
         } finally {
             DB_MANAGER_INSTANCE.close(rs);
         }
@@ -113,7 +154,9 @@ public final class ReserveDaoImpl implements ReserveDao {
                     reserve.setId(resultSet.getLong(i));
                     break;
                 case SQL_RESERVE_ACCOUNT_ID:
-                    reserve.setAccountId(resultSet.getLong(i));
+                    Long accountId = resultSet.getLong(i);
+                    reserve.setAccountId(accountId);
+                    reserve.setAccount(accountDao.find(accountId));
                     break;
                 case SQL_RESERVE_BOOK_ID:
                     Long bookId = resultSet.getLong(i);
@@ -125,6 +168,9 @@ public final class ReserveDaoImpl implements ReserveDao {
                     break;
                 case SQL_RESERVE_FINAL_DATE:
                     reserve.setFinalDate(resultSet.getObject(i, LocalDate.class));
+                    break;
+                case SQL_RESERVE_SUBMITTED_DATE:
+                    reserve.setSubmittedDate(resultSet.getObject(i, LocalDate.class));
                     break;
                 case SQL_RESERVE_IS_ACTIVE:
                     reserve.setActive(resultSet.getBoolean(i));

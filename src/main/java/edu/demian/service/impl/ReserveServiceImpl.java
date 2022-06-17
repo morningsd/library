@@ -17,7 +17,17 @@ public final class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
+    public List<Reserve> findAllActiveForUser(Long id) {
+        return reserveDao.findAllActiveForUser(id);
+    }
+
+    @Override
     public List<Reserve> findAllForUser(Long id) {
         return reserveDao.findAllForUser(id);
+    }
+
+    @Override
+    public List<Reserve> findAllActive() {
+        return reserveDao.findAllActive();
     }
 }

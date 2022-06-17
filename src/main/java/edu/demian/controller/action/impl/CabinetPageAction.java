@@ -4,7 +4,9 @@ import edu.demian.controller.action.Action;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Reserve;
 import edu.demian.model.entity.Role;
+import edu.demian.service.AccountService;
 import edu.demian.service.ReserveService;
+import edu.demian.service.impl.AccountServiceImpl;
 import edu.demian.service.impl.ReserveServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public final class CabinetPageAction extends Action {
 
     private final ReserveService reserveService = new ReserveServiceImpl();
+    private final AccountService accountService = new AccountServiceImpl();
 
     @Override
     protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
@@ -26,8 +29,8 @@ public final class CabinetPageAction extends Action {
 
         final Account account = (Account) session.getAttribute("account");
         final Role accountRole = (Role) session.getAttribute("accountRole");
-        if ("READER".equalsIgnoreCase(accountRole.toString())) {
-            final List<Reserve> reserveList = reserveService.findAllForUser(account.getId());
+        if (Role.READER.getName().equalsIgnoreCase(accountRole.toString())) {
+            final List<Reserve> reserveList = reserveService.findAllActiveForUser(account.getId());
             session.setAttribute("reserveList", reserveList);
             for (Reserve reserve: reserveList) {
                 final LocalDate createdDate = reserve.getCreatedDate();
@@ -39,9 +42,11 @@ public final class CabinetPageAction extends Action {
                 }
             }
         }
-        if ("LIBRARIAN".equalsIgnoreCase(accountRole.toString())) {
+        if (Role.LIBRARIAN.getName().equalsIgnoreCase(accountRole.toString())) {
             // list of users' orders
             // list of users + abonements
+            List<Account> readerList = accountService.findAllReaders();
+            session.setAttribute("readerList", readerList);
         }
 
         return "/cabinet";

@@ -10,10 +10,12 @@ public class Reserve implements BaseEntity {
     private Long bookId;
     private LocalDate createdDate;
     private LocalDate finalDate;
+    private LocalDate submittedDate;
     private Boolean isActive;
     private BigDecimal fine;
 
     private Book book;
+    private Account account;
 
     @Override
     public Long getId() {
@@ -56,6 +58,14 @@ public class Reserve implements BaseEntity {
         this.finalDate = finalDate;
     }
 
+    public LocalDate getSubmittedDate() {
+        return submittedDate;
+    }
+
+    public void setSubmittedDate(LocalDate submittedDate) {
+        this.submittedDate = submittedDate;
+    }
+
     public Boolean getActive() {
         return isActive;
     }
@@ -78,6 +88,14 @@ public class Reserve implements BaseEntity {
 
     public void setFine(BigDecimal fine) {
         this.fine = fine;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override

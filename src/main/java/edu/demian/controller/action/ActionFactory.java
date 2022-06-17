@@ -27,6 +27,10 @@ public final class ActionFactory {
         actions.put("/admin/blockAccount", new BlockAccountAction());
         actions.put("/admin/unblockAccount", new UnblockAccountAction());
         actions.put("/reader/orderBook", new OrderBookAction());
+        actions.put("/librarian/readers", new ReadersPageAction());
+        actions.put("/librarian/subscriptions", new SubscriptionsPageAction());
+        actions.put("/librarian/orders", new OrdersPageAction());
+        actions.put("/librarian/manageOrders", new ManageOrdersPageAction());
     }
 
     public static Action getAction(final HttpServletRequest request) {

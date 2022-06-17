@@ -14,6 +14,8 @@ public interface AccountDao {
 
     List<Account> findAllLibrarians();
 
+    List<Account> findAllReaders();
+
     void save(Account account, String password);
 
     void delete(Long id);

@@ -5,9 +5,7 @@ import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Book;
 import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
-import edu.demian.service.CatalogService;
 import edu.demian.service.impl.BookServiceImpl;
-import edu.demian.service.impl.CatalogServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +16,6 @@ public final class AddBookAction extends Action {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
     private final BookService bookService = new BookServiceImpl();
-    private final CatalogService catalogService = new CatalogServiceImpl();
 
     @Override
     protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
@@ -38,7 +35,7 @@ public final class AddBookAction extends Action {
         book.setAuthor(author);
         book.setPublisher(publisher);
         book.setPublishedDate(LocalDate.parse(publishedDate, formatter));
-        book.setStatusId(BookStatus.IN_STOCK.ordinal());
+        book.setStatusId(BookStatus.IN_STOCK.getId());
 
         Book savedBook = bookService.save(book, Integer.parseInt(quantity));
 

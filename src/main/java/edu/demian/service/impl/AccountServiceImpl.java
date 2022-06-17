@@ -40,6 +40,11 @@ public final class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<Account> findAllReaders() {
+        return accountDao.findAllReaders();
+    }
+
+    @Override
     public void save(final Account account, final String password) {
         accountDao.save(account, password);
     }
@@ -47,6 +52,11 @@ public final class AccountServiceImpl implements AccountService {
     @Override
     public void unblock(final Long id) {
         accountDao.unblock(id);
+    }
+
+    @Override
+    public Account find(Long id) {
+        return accountDao.find(id);
     }
 
 }

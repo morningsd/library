@@ -3,6 +3,7 @@ package edu.demian.service.impl;
 import edu.demian.model.dao.BookDao;
 import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
+import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
 
 import java.util.List;
@@ -31,6 +32,11 @@ public final class BookServiceImpl implements BookService {
     public List<Book> findAll(final String nameOrder, final String authorOrder, final String publisherOrder, final String publisherDateOrder,
                               final int limit, final long offset) {
         return bookDao.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+    }
+
+    @Override
+    public void setStatus(Long bookId, Integer statusId) {
+        bookDao.setStatus(bookId, statusId);
     }
 
 }
