@@ -6,28 +6,28 @@
 <div class="container">
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
     <div class="text-center">
-        <h2>Register a new librarian</h2>
+        <h2><fmt:message key="addlibrarian_jsp.title.register_librarian" /></h2>
     </div>
     <form action="/jsp/admin/addLibrarian" method="post" name="registration">
         <div class="row form-group">
             <div class="col">
-                <label for="fname"><fmt:message key="register_jsp.label.fname" />:</label>
-                <input type="text" class="form-control" id="fname" placeholder="<fmt:message key="register_jsp.placeholder.fname" />" name="fname">
+                <label for="fname"><fmt:message key="addlibrarian_jsp.label.fname" />:</label>
+                <input type="text" class="form-control" id="fname" placeholder="<fmt:message key="addlibrarian_jsp.placeholder.fname" />" name="fname">
             </div>
             <div class="col">
-                <label for="lname"><fmt:message key="register_jsp.label.lname"/>:</label>
-                <input type="text" class="form-control" id="lname" placeholder="<fmt:message key="register_jsp.placeholder.lname" />" name="lname">
+                <label for="lname"><fmt:message key="addlibrarian_jsp.label.lname"/>:</label>
+                <input type="text" class="form-control" id="lname" placeholder="<fmt:message key="addlibrarian_jsp.placeholder.lname" />" name="lname">
             </div>
         </div>
         <div class="form-group">
-            <label for="email"><fmt:message key="register_jsp.label.email" />:</label>
-            <input type="email" class="form-control" placeholder="<fmt:message key="register_jsp.placeholder.email" />" id="email" name="email">
+            <label for="email"><fmt:message key="addlibrarian_jsp.label.email" />:</label>
+            <input type="email" class="form-control" placeholder="<fmt:message key="addlibrarian_jsp.placeholder.email" />" id="email" name="email">
         </div>
         <div class="form-group">
-            <label for="password"><fmt:message key="register_jsp.label.password" />:</label>
-            <input type="password" class="form-control" placeholder="<fmt:message key="register_jsp.placeholder.password" />" id="password" name="password">
+            <label for="password"><fmt:message key="addlibrarian_jsp.label.password" />:</label>
+            <input type="password" class="form-control" placeholder="<fmt:message key="addlibrarian_jsp.placeholder.password" />" id="password" name="password">
         </div>
-        <button type="submit" class="btn btn-primary"><fmt:message key="register_jsp.button.register"/></button>
+        <button type="submit" class="btn btn-primary"><fmt:message key="addlibrarian_jsp.button.register"/></button>
     </form>
 
     <%@ include file="/WEB-INF/jspf/footer.jspf" %>

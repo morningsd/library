@@ -6,6 +6,8 @@ import edu.demian.model.entity.Reserve;
 import edu.demian.model.entity.Role;
 import edu.demian.service.AccountService;
 import edu.demian.service.ReserveService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.service.impl.AccountServiceImpl;
 import edu.demian.service.impl.ReserveServiceImpl;
 
@@ -20,8 +22,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public final class CabinetPageAction extends Action {
 
-    private final ReserveService reserveService = new ReserveServiceImpl();
-    private final AccountService accountService = new AccountServiceImpl();
+    private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);
+    private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);
 
     @Override
     protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {

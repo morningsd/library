@@ -5,6 +5,8 @@ import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
 import edu.demian.service.ReserveService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.service.impl.BookServiceImpl;
 import edu.demian.service.impl.ReserveServiceImpl;
 
@@ -13,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ManageOrdersPageAction extends Action {
 
-    private final ReserveService reserveService = new ReserveServiceImpl();
+    private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);
     private final BookService bookService = new BookServiceImpl();
 
     @Override

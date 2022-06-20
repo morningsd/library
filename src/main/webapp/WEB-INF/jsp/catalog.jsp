@@ -168,7 +168,7 @@
                         <li class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1"><i class="bi bi-book">${book.name}</i></h5>
-                                <small><i class="bi bi-basket3">${book.quantity} in stock</i></small>
+                                <small><i class="bi bi-basket3">${book.quantity} <fmt:message key="catalog_jsp.booklist.in_stock" /></i></small>
                             </div>
                             <p class="mb-1">
                                 <i class="bi bi-file-earmark-person">${book.author}</i>&nbsp;
@@ -186,7 +186,7 @@
                                         <c:when test="${fnc:contains(accountBookList, book)}}">
                                             <button type="submit" class="btn btn-outline-secondary" disabled><fmt:message
                                                     key="catalog_jsp.button.order"/></button>
-                                            <small>You already have this book in your cabinet</small>
+                                            <small><fmt:message key="catalog_jsp.booklist.already_have_this_book" /></small>
                                         </c:when>
                                         <c:otherwise>
                                             <button type="submit" class="btn btn-outline-secondary" disabled><fmt:message

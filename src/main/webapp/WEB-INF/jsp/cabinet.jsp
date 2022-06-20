@@ -5,12 +5,12 @@
 <body>
 <div class="container">
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
-    <h3 class="text-center">${account.firstName} ${account.lastName} (email: ${account.email}) ${accountRole}</h3>
+    <h3 class="text-center"><fmt:message key="cabinet_jsp.title.user" />: ${account.firstName} ${account.lastName} (<fmt:message key="cabinet_jsp.title.email"/>: ${account.email}) ${accountRole}</h3>
     <c:if test="${accountRole eq 'READER'}">
         <c:choose>
             <c:when test="${empty reserveList}">
                 <div class="text-center">
-                    <h2>You have not ordered any books yet</h2>
+                    <h2><fmt:message key="cabinet_jsp.reservelist.have_not_ordered" /></h2>
                 </div>
             </c:when>
             <c:otherwise>
@@ -19,7 +19,7 @@
                         <li class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>
-                                <i class="bi bi-basket3">Created date: ${reserve.createdDate}</i>
+                                <i class="bi bi-basket3"><fmt:message key="cabinet_jsp.reservelist.created_date" />: ${reserve.createdDate}</i>
                             </div>
                             <div class="d-flex w-100 justify-content-between">
                                 <p class="mb-1">
@@ -28,10 +28,9 @@
                                     <i class="bi bi-calendar-date">${reserve.book.publishedDate}</i>
                                 </p>
                                 <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">
-                                    <i class="bi bi-basket3">Fine: <fmt:formatNumber value="${reserve.fine}"
-                                                                                     minFractionDigits="0"/></i>
+                                    <i class="bi bi-basket3"><fmt:message key="cabinet_jsp.reservelist.fine" />: <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>
                                 </c:if>
-                                <i class="bi bi-basket3">Final date: ${reserve.finalDate}</i>
+                                <i class="bi bi-basket3"><fmt:message key="cabinet_jsp.reservelist.final_date" />: ${reserve.finalDate}</i>
                             </div>
                         </li>
                     </c:forEach>
@@ -43,10 +42,10 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <a class="btn btn-outline-info form-control btn-block" href="/jsp/librarian/readers">Readers</a>
+                    <a class="btn btn-outline-info form-control btn-block" href="/jsp/librarian/readers"><fmt:message key="cabinet_jsp.readers.button" /></a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-outline-primary form-control btn-block" href="/jsp/librarian/orders">Orders</a>
+                    <a class="btn btn-outline-primary form-control btn-block" href="/jsp/librarian/orders"><fmt:message key="cabinet_jsp.orders.button" /></a>
                 </div>
             </div>
         </div>

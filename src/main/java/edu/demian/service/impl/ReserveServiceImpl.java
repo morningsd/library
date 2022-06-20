@@ -1,7 +1,8 @@
 package edu.demian.service.impl;
 
 import edu.demian.model.dao.ReserveDao;
-import edu.demian.model.dao.impl.ReserveDaoImpl;
+import edu.demian.model.dao.factory.DaoFactory;
+import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.entity.Reserve;
 import edu.demian.service.ReserveService;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public final class ReserveServiceImpl implements ReserveService {
 
-    private final ReserveDao reserveDao = new ReserveDaoImpl();
+    private final ReserveDao reserveDao = DaoFactory.getReserveDao(DaoFactoryType.POSTGRESQL);
 
     @Override
     public void save(final Reserve reserve) {

@@ -1,7 +1,8 @@
 package edu.demian.service.impl;
 
 import edu.demian.model.dao.AccountDao;
-import edu.demian.model.dao.impl.AccountDaoImpl;
+import edu.demian.model.dao.factory.DaoFactory;
+import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.entity.Account;
 import edu.demian.service.AccountService;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 public final class AccountServiceImpl implements AccountService {
 
-    private final AccountDao accountDao = new AccountDaoImpl();
+    private final AccountDao accountDao = DaoFactory.getAccountDao(DaoFactoryType.POSTGRESQL);
 
     public void saveLibrarian(final Account account, final String password) {
         accountDao.save(account, password);

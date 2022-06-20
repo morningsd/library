@@ -8,22 +8,21 @@ public interface AccountDao {
 
     Account find(Long id);
 
-    Account findByEmailAndPassword(String email, String password);
+    void save(Account account, String password);
+
+    void delete(Long id);
 
     List<Account> findAll();
+
+    Account findByEmailAndPassword(String email, String password);
 
     List<Account> findAllLibrarians();
 
     List<Account> findAllReaders();
 
-    void save(Account account, String password);
-
-    void delete(Long id);
-
     void block(Long accountId);
 
     void unblock(Long accountId);
-
 
 
 }

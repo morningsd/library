@@ -12,7 +12,7 @@
                 <a href="/jsp/register"><fmt:message key="header_jspf.label.register" /></a>
             </c:when>
             <c:otherwise>
-                Hello, ${account.firstName}!
+                <fmt:message key="header_jspf.navbar.hello"/>, ${account.firstName}!
             </c:otherwise>
         </c:choose>
     </div>
@@ -22,7 +22,7 @@
         </button>
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/jsp/catalog">Catalog</a></li>
+                <li class="nav-item"><a class="nav-link" href="/jsp/catalog"><fmt:message key="header_jspf.navbar.catalog" /></a></li>
                 <c:choose>
                     <c:when test="${empty accountRole}">
                         <li class="nav-item"><a class="nav-link" href="/jsp/login"><fmt:message key="header_jspf.navbar.cabinet" /></a></li>
@@ -41,16 +41,16 @@
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle nav-link" type="button" id="dropdownMenuButtonAdmin" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                    Administration
+                                    <fmt:message key="header_jspf.navbar.administration" />
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonAdmin">
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/addBook">Add book</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageLibrarians">Add/delete librarian</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageAccounts">Block/unblock account</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/addBook"><fmt:message key="header_jspf.navbar.add_book" /></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageLibrarians"><fmt:message key="header_jspf.navbar.add_delete_librarians" /></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/jsp/admin/manageAccounts"><fmt:message key="header_jspf.navbar.block_unblock_account" /></a></li>
                                 </div>
                             </div>
                         </c:if>
-                        <li class="nav-item"><a class="nav-link" href="/jsp/logout">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/jsp/logout"><fmt:message key="header_jspf.navbar.logout" /></a></li>
                     </c:otherwise>
                 </c:choose>
             </ul>

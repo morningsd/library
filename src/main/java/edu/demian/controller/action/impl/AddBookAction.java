@@ -5,6 +5,8 @@ import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Book;
 import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.service.impl.BookServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 public final class AddBookAction extends Action {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-    private final BookService bookService = new BookServiceImpl();
+    private final BookService bookService = ServiceFactory.getBookService(ServiceFactoryType.DEFAULT);
 
     @Override
     protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {

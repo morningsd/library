@@ -8,7 +8,7 @@
     <c:choose>
         <c:when test="${empty reserveList}">
             <div class="text-center">
-                <h2>${reader.firstName} ${reader.lastName} have not ordered any books yet</h2>
+                <h2>${reader.firstName} ${reader.lastName} <fmt:message key="subscriptions_jsp.title.no_books_ordered" /></h2>
             </div>
         </c:when>
         <c:otherwise>
@@ -17,8 +17,8 @@
                     <li class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>
-                            <i class="bi bi-basket3">Active: ${reserve.active}</i>
-                            <i class="bi bi-basket3">Created date: ${reserve.createdDate}</i>
+                            <i class="bi bi-basket3"><fmt:message key="subscriptions_jsp.reservelist.active" />: ${reserve.active}</i>
+                            <i class="bi bi-basket3"><fmt:message key="subscriptions_jsp.reservelist.created_date" />: ${reserve.createdDate}</i>
                         </div>
                         <div class="d-flex w-100 justify-content-between">
                             <p class="mb-1">
@@ -27,11 +27,10 @@
                                 <i class="bi bi-calendar-date">${reserve.book.publishedDate}</i>
                             </p>
                             <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">
-                                <i class="bi bi-basket3">Fine: <fmt:formatNumber value="${reserve.fine}"
-                                                                                 minFractionDigits="0"/></i>
+                                <i class="bi bi-basket3"><fmt:message key="subscriptions_jsp.reservelist.fine" />: <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>
                             </c:if>
-                            <i class="bi bi-basket3">Submitted date: ${reserve.submittedDate}</i>
-                            <i class="bi bi-basket3">Final date: ${reserve.finalDate}</i>
+                            <i class="bi bi-basket3"><fmt:message key="subscriptions_jsp.reservelist.submitted_date" />: ${reserve.submittedDate}</i>
+                            <i class="bi bi-basket3"><fmt:message key="subscriptions_jsp.reservelist.final_date" />: ${reserve.finalDate}</i>
                         </div>
                     </li>
                 </c:forEach>

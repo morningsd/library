@@ -9,7 +9,7 @@
     <c:choose>
     <c:when test="${empty reserveList}">
         <div class="text-center">
-            <h2>You have not ordered any books yet</h2>
+            <h2><fmt:message key="orders_jsp.title.no_books_ordered" /></h2>
         </div>
     </c:when>
     <c:otherwise>
@@ -18,10 +18,18 @@
             <c:forEach var="reserve" items="${reserveList}">
                 <div class="row">
                     <div class="col-8">
-                        <li class="list-group-item">
+                        <li class="list-group-item mb-2">
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1">
+                                    <i class="bi bi-file-earmark-person">${reserve.account.firstName}</i>&nbsp;
+                                    <i class="bi bi-briefcase">${reserve.account.lastName}</i>&nbsp;
+                                    <i class="bi bi-calendar-date">${reserve.account.email}</i>&nbsp;
+                                </p>
+                                <i class="bi bi-basket3"><fmt:message key="orders_jsp.reservelist.created_date" />: ${reserve.createdDate}</i>
+                            </div>
+                            <hr>
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>
-                                <i class="bi bi-basket3">Created date: ${reserve.createdDate}</i>
                             </div>
                             <div class="d-flex w-100 justify-content-between">
                                 <p class="mb-1">
@@ -31,29 +39,28 @@
                                     <i class="bi bi-briefcase">${reserve.book.status}</i>
                                 </p>
                                 <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">
-                                    <i class="bi bi-basket3">Fine: <fmt:formatNumber value="${reserve.fine}"
-                                                                                     minFractionDigits="0"/></i>
+                                    <i class="bi bi-basket3"><fmt:message key="orders_jsp.reservelist.fine" />: <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>
                                 </c:if>
-                                    <%--                                        <i class="bi bi-basket3">Final date: ${reserve.finalDate}</i>--%>
+                                    <%-- <i class="bi bi-basket3">Final date: ${reserve.finalDate}</i>--%>
                             </div>
                         </li>
                     </div>
                     <div class="col-4">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <form class="form-inline" method="post" action="/jsp/librarian/manageOrders">
+                            <form class="form-inline mr-3" method="post" action="/jsp/librarian/manageOrders">
                                 <input type="hidden" name="book_id" value="${reserve.book.id}">
                                 <input type="hidden" name="book_status" value="SUBSCRIPTION">
-                                <button type="submit" class="btn btn-outline-primary">Subscription</button>
+                                <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.subscription" /></button>
                             </form>
-                            <form class="form-inline" method="post" action="/jsp/librarian/manageOrders">
+                            <form class="form-inline mr-3" method="post" action="/jsp/librarian/manageOrders">
                                 <input type="hidden" name="book_id" value="${reserve.book.id}">
                                 <input type="hidden" name="book_status" value="READING_ROOM">
-                                <button type="submit" class="btn btn-outline-primary">Reading&nbsp;room</button>
+                                <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.reading_room"/></button>
                             </form>
                             <form class="form-inline" method="post" action="/jsp/librarian/manageOrders">
                                 <input type="hidden" name="book_id" value="${reserve.book.id}">
                                 <input type="hidden" name="book_status" value="IN_STOCK">
-                                <button type="submit" class="btn btn-outline-primary">In&nbsp;stock</button>
+                                <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.return" /></button>
                             </form>
                         </div>
                     </div>

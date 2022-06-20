@@ -5,6 +5,8 @@ import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Book;
 import edu.demian.service.BookService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.service.impl.BookServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +20,7 @@ public final class CatalogPageAction extends Action {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";
 
-    private final BookService bookService = new BookServiceImpl();
+    private final BookService bookService = ServiceFactory.getBookService(ServiceFactoryType.DEFAULT);
 
 
     @Override

@@ -7,7 +7,7 @@
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
     <c:if test="${empty accountList}">
         <div class="text-center">
-            <h2>No users are registered right now</h2>
+            <h2><fmt:message key="manageaccounts_jsp.title.no_users_registered" /></h2>
         </div>
     </c:if>
     <c:if test="${not empty accountList}">
@@ -15,20 +15,20 @@
         <ul class="list-group list-group-flush">
             <c:forEach var="account" items="${accountList}">
                 <li class="list-group-item">
-                    <i class="bi bi-file-earmark-person">First name: "${account.firstName}"</i>&nbsp;
-                    Last name: "${account.lastName}"&nbsp;
-                    Email: "${account.email}"&nbsp;
-                    Is admin: "${account.admin}"&nbsp;
-                    Is blocked: "${account.blocked}"&nbsp;
+                    <i class="bi bi-file-earmark-person"><fmt:message key="manageaccounts_jsp.accountlist.fname" />: "${account.firstName}"</i>&nbsp;
+                    <fmt:message key="manageaccounts_jsp.accountlist.lname" />: "${account.lastName}"&nbsp;
+                    <fmt:message key="manageaccounts_jsp.accountlist.email" />: "${account.email}"&nbsp;
+                    <fmt:message key="manageaccounts_jsp.accountlist.is_admin"/>: "${account.admin}"&nbsp;
+                    <fmt:message key="manageaccounts_jsp.accountlist.is_blocked" />: "${account.blocked}"&nbsp;
                     <form class="form-inline" method="post" action="/jsp/admin/unblockAccount">
                         <input type="hidden" name="account_id" value="${account.id}">
                         <button type="submit" class="btn btn-outline-primary"><fmt:message
-                                key="manageAccounts_jsp.account.button.unblock"/></button>
+                                key="manageaccounts_jsp.accountlist.button.unblock"/></button>
                     </form>
                     <form class="form-inline" method="post" action="/jsp/admin/blockAccount">
                         <input type="hidden" name="account_id" value="${account.id}">
                         <button type="submit" class="btn btn-outline-secondary"><fmt:message
-                                key="manageAccounts_jsp.account.button.block"/></button>
+                                key="manageaccounts_jsp.accountlist.button.block"/></button>
                     </form>
                 </li>
             </c:forEach>

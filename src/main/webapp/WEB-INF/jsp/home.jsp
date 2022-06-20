@@ -11,22 +11,22 @@
 			<div class="carousel-item active">
 				<img class="d-block w-100" src="/img/slide-photo-1.jpg" alt="First slide">
 				<div class="carousel-caption d-none d-md-block">
-					<h4>Caption</h4>
-					<p>Paragraph</p>
+					<h4><fmt:message key="home_jsp.carousel.caption1" /></h4>
+					<p><fmt:message key="home_jsp.carousel.description1" /></p>
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img class="d-block w-100" src="/img/slide-photo-3.jpeg" alt="Third slide">
 				<div class="carousel-caption d-none d-md-block">
-					<h4>Caption</h4>
-					<p>Paragraph</p>
+					<h4><fmt:message key="home_jsp.carousel.caption2" /></h4>
+					<p><fmt:message key="home_jsp.carousel.description2" /></p>
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img class="d-block w-100" src="/img/slide-photo-4.jpeg" alt="Fourth slide">
 				<div class="carousel-caption d-none d-md-block">
-					<h4>Caption</h4>
-					<p>Paragraph</p>
+					<h4><fmt:message key="home_jsp.carousel.caption3" /></h4>
+					<p><fmt:message key="home_jsp.carousel.description3" /></p>
 				</div>
 			</div>
 		</div>

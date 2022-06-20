@@ -1,16 +1,17 @@
 package edu.demian.service.impl;
 
 import edu.demian.model.dao.BookDao;
+import edu.demian.model.dao.factory.DaoFactory;
+import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.dao.impl.BookDaoImpl;
 import edu.demian.model.entity.Book;
-import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
 
 import java.util.List;
 
 public final class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao = new BookDaoImpl();
+    private final BookDao bookDao = DaoFactory.getBookDao(DaoFactoryType.POSTGRESQL);
 
     @Override
     public Book save(final Book book, final Integer quantity) {
