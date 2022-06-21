@@ -36,16 +36,25 @@
 		<res-auth>Container</res-auth>
 	</resource-ref>
 
+<!--	<servlet>-->
+<!--		<servlet-name>FrontServlet</servlet-name>-->
+<!--		<servlet-class>edu.demian.web.controller.FrontServlet</servlet-class>-->
+<!--	</servlet>-->
+<!--	<servlet-mapping>-->
+<!--		<servlet-name>FrontServlet</servlet-name>-->
+<!--		<url-pattern>/jsp/*</url-pattern>-->
+<!--		<url-pattern>/*</url-pattern>-->
+<!--	</servlet-mapping>-->
+
 	<servlet>
 		<servlet-name>FrontServlet</servlet-name>
-		<servlet-class>edu.demian.web.controller.FrontServlet</servlet-class>
+		<servlet-class>edu.demian.web.controller.FrontServletMain</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FrontServlet</servlet-name>
 		<url-pattern>/jsp/*</url-pattern>
-<!--		<url-pattern>/*</url-pattern>-->
 	</servlet-mapping>
-
+	
 
 	<filter>
 		<filter-name>StaticFilter</filter-name>
@@ -53,11 +62,21 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>StaticFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-<!--		<url-pattern>/css/*</url-pattern>-->
-<!--		<url-pattern>/js/*</url-pattern>-->
-<!--		<url-pattern>/img/*</url-pattern>-->
+		<url-pattern>/css/*</url-pattern>
+		<url-pattern>/js/*</url-pattern>
+		<url-pattern>/img/*</url-pattern>
 	</filter-mapping>
+
+
+	<filter>
+		<filter-name>NotAvailableResourceFilter</filter-name>
+		<filter-class>edu.demian.web.filter.NotAvailableResourceFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>NotAvailableResourceFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 
 	<filter>
 		<filter-name>SessionLocaleFilter</filter-name>
@@ -68,14 +87,14 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<filter>
-		<filter-name>UrlAccessFilter</filter-name>
-		<filter-class>edu.demian.web.filter.UrlAccessFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>UrlAccessFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!--	<filter>-->
+<!--		<filter-name>UrlAccessFilter</filter-name>-->
+<!--		<filter-class>edu.demian.web.filter.UrlAccessFilter</filter-class>-->
+<!--	</filter>-->
+<!--	<filter-mapping>-->
+<!--		<filter-name>UrlAccessFilter</filter-name>-->
+<!--		<url-pattern>/*</url-pattern>-->
+<!--	</filter-mapping>-->
 
 
 </web-app>

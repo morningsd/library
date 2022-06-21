@@ -5,11 +5,11 @@ import edu.demian.web.annotation.PageAccessorType;
 import edu.demian.web.controller.action.Action;
 import edu.demian.web.controller.action.ActionException;
 import edu.demian.model.entity.BookStatus;
-import edu.demian.model.service.BookService;
-import edu.demian.model.service.ReserveService;
-import edu.demian.model.service.factory.ServiceFactory;
-import edu.demian.model.service.factory.ServiceFactoryType;
-import edu.demian.model.service.impl.BookServiceImpl;
+import edu.demian.service.BookService;
+import edu.demian.service.ReserveService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
+import edu.demian.service.impl.BookServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

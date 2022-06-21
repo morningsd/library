@@ -6,9 +6,9 @@ import edu.demian.web.controller.action.Action;
 import edu.demian.web.controller.action.ActionException;
 import edu.demian.model.entity.Book;
 import edu.demian.model.entity.BookStatus;
-import edu.demian.model.service.BookService;
-import edu.demian.model.service.factory.ServiceFactory;
-import edu.demian.model.service.factory.ServiceFactoryType;
+import edu.demian.service.BookService;
+import edu.demian.service.factory.ServiceFactory;
+import edu.demian.service.factory.ServiceFactoryType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

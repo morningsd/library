@@ -1,4 +1,4 @@
-package edu.demian.model.service.factory;
+package edu.demian.service.factory;
 
 public final class ServiceFactoryType {
 

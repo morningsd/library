@@ -1,8 +1,5 @@
-package edu.demian.web.controller.action.impl;
+package edu.demian.web.controller.page.jsp;
 
-import edu.demian.web.annotation.PageAccessor;
-import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Reserve;
 import edu.demian.model.entity.Role;
@@ -10,6 +7,9 @@ import edu.demian.service.AccountService;
 import edu.demian.service.ReserveService;
 import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
+import edu.demian.web.annotation.PageAccessor;
+import edu.demian.web.annotation.PageAccessorType;
+import edu.demian.web.controller.action.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,13 +21,12 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @PageAccessor(allowedTo = {PageAccessorType.READER, PageAccessorType.LIBRARIAN, PageAccessorType.ADMINISTRATOR})
-public final class CabinetPageAction extends Action {
+public class CabinetPage {
 
     private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);
 
-    @Override
-    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
+    private void action(final HttpServletRequest request) {
         final HttpSession session = request.getSession();
 
         final Account account = (Account) session.getAttribute("account");
@@ -51,12 +50,6 @@ public final class CabinetPageAction extends Action {
             List<Account> readerList = accountService.findAllReaders();
             session.setAttribute("readerList", readerList);
         }
-
-        return "/cabinet";
     }
 
-    @Override
-    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
-        throw new UnsupportedOperationException("This url does not support POST method");
-    }
 }

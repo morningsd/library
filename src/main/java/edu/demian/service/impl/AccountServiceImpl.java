@@ -1,10 +1,10 @@
-package edu.demian.model.service.impl;
+package edu.demian.service.impl;
 
 import edu.demian.model.dao.AccountDao;
 import edu.demian.model.dao.factory.DaoFactory;
 import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.entity.Account;
-import edu.demian.model.service.AccountService;
+import edu.demian.service.AccountService;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package edu.demian.model.service;
+package edu.demian.service;
 
 import edu.demian.model.entity.Account;
 

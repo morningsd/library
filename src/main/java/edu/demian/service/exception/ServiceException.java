@@ -1,4 +1,4 @@
-package edu.demian.model.service.exception;
+package edu.demian.service.exception;
 
 public class ServiceException extends RuntimeException {
 

@@ -1,32 +1,35 @@
-package edu.demian.web.controller.action.impl;
+package edu.demian.web.controller.page.jsp;
 
-import edu.demian.web.annotation.PageAccessor;
-import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
-import edu.demian.web.controller.action.ActionException;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Book;
+import edu.demian.model.entity.Reserve;
 import edu.demian.service.BookService;
+import edu.demian.service.ReserveService;
 import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
+import edu.demian.web.annotation.PageAccessor;
+import edu.demian.web.annotation.PageAccessorType;
+import edu.demian.web.controller.action.ActionException;
+import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
 
 @PageAccessor(allowedTo = {PageAccessorType.ALL})
-public final class CatalogPageAction extends Action {
+public class CatalogPage {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";
 
+    private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);
     private final BookService bookService = ServiceFactory.getBookService(ServiceFactoryType.DEFAULT);
 
 
-    @Override
-    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
+    private void action(final HttpServletRequest request) {
         final HttpSession session = request.getSession();
 
         final String requestNameOrder = request.getParameter("sort_name");
@@ -72,14 +75,25 @@ public final class CatalogPageAction extends Action {
             accountBookList = bookService.findAllForUser(account.getId());
         }
         session.setAttribute("accountBookList", accountBookList);
-
-        return "/catalog";
     }
 
-    @Override
-    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
-        throw new UnsupportedOperationException("This url does not support POST method");
+
+    private void orderBook(final HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        final Account account = (Account) session.getAttribute("account");
+
+        final String bookId = request.getParameter("book_id");
+
+        final Reserve reserve = new Reserve();
+        reserve.setAccountId(account.getId());
+        reserve.setBookId(Long.parseLong(bookId));
+        reserve.setFinalDate(LocalDate.now().plusMonths(1));
+
+        reserveService.save(reserve);
+
+        throw new RedirectException("/jsp/cabinet");
     }
+
 
     // TODO refactor and move it to book service (mb as a static method)
     private Object getAttribute(final HttpSession session, final String name, final String propertyPrefix) {
@@ -91,7 +105,7 @@ public final class CatalogPageAction extends Action {
     private String getApplicationProperty(final String name) {
         try {
             final Properties properties = new Properties();
-            properties.load(CatalogPageAction.class.getResourceAsStream(APPLICATION_PROPERTIES));
+            properties.load(CatalogPage.class.getResourceAsStream(APPLICATION_PROPERTIES));
             return properties.getProperty(name);
         } catch (IOException e) {
             throw new ActionException("Can't read property [" + name + "] from file: " + APPLICATION_PROPERTIES , e);

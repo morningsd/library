@@ -1,10 +1,10 @@
-package edu.demian.model.service.impl;
+package edu.demian.service.impl;
 
 import edu.demian.model.dao.ReserveDao;
 import edu.demian.model.dao.factory.DaoFactory;
 import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.entity.Reserve;
-import edu.demian.model.service.ReserveService;
+import edu.demian.service.ReserveService;
 
 import java.util.List;
 
