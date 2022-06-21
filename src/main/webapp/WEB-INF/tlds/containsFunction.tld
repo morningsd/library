@@ -12,7 +12,7 @@
     <short-name>CustomFunctionTag</short-name>
     <function>
         <name>contains</name>
-        <function-class>edu.demian.tag.ContainsFunctionTag</function-class>
+        <function-class>edu.demian.web.tag.ContainsFunctionTag</function-class>
         <function-signature>boolean contains(java.util.Collection,java.lang.Object)
         </function-signature>
     </function>

@@ -38,7 +38,7 @@
 
 	<servlet>
 		<servlet-name>FrontServlet</servlet-name>
-		<servlet-class>edu.demian.controller.FrontServlet</servlet-class>
+		<servlet-class>edu.demian.web.controller.FrontServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FrontServlet</servlet-name>
@@ -46,9 +46,22 @@
 <!--		<url-pattern>/*</url-pattern>-->
 	</servlet-mapping>
 
+
+	<filter>
+		<filter-name>StaticFilter</filter-name>
+		<filter-class>edu.demian.web.filter.StaticFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>StaticFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+<!--		<url-pattern>/css/*</url-pattern>-->
+<!--		<url-pattern>/js/*</url-pattern>-->
+<!--		<url-pattern>/img/*</url-pattern>-->
+	</filter-mapping>
+
 	<filter>
 		<filter-name>SessionLocaleFilter</filter-name>
-		<filter-class>edu.demian.filter.SessionLocaleFilter</filter-class>
+		<filter-class>edu.demian.web.filter.SessionLocaleFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>SessionLocaleFilter</filter-name>
@@ -57,7 +70,7 @@
 
 	<filter>
 		<filter-name>UrlAccessFilter</filter-name>
-		<filter-class>edu.demian.filter.UrlAccessFilter</filter-class>
+		<filter-class>edu.demian.web.filter.UrlAccessFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>UrlAccessFilter</filter-name>
