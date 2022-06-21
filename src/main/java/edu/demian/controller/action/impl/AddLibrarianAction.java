@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Account;
@@ -12,6 +14,7 @@ import edu.demian.service.impl.AccountServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
 public final class AddLibrarianAction extends Action {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);

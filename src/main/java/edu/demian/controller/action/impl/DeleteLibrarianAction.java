@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.AccountDaoImpl;
@@ -11,6 +13,7 @@ import edu.demian.service.impl.AccountServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@PageAccessor(allowedTo = {PageAccessorType.ADMINISTRATOR})
 public final class DeleteLibrarianAction extends Action {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);

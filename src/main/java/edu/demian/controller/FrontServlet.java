@@ -12,6 +12,7 @@ import edu.demian.controller.action.ActionFactory;
 
 public final class FrontServlet extends HttpServlet {
 
+
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		process(request, response);

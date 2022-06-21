@@ -1,4 +1,4 @@
-package edu.demian.util.tag;
+package edu.demian.tag;
 
 import java.util.Collection;
 

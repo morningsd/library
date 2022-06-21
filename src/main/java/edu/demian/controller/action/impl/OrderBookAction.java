@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.ReserveDaoImpl;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 
+@PageAccessor(allowedTo = {PageAccessorType.READER, PageAccessorType.ADMINISTRATOR})
 public final class OrderBookAction extends Action {
 
     private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);

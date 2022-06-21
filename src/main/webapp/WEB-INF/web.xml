@@ -5,9 +5,9 @@
 	id="WebApp_ID" version="4.0">
 	<display-name>Library</display-name>
 
-    <welcome-file-list>
-        <welcome-file>/WEB-INF/jsp/home.jsp</welcome-file>
-    </welcome-file-list>
+<!--    <welcome-file-list>-->
+<!--        <welcome-file>/WEB-INF/jsp/home.jsp</welcome-file>-->
+<!--    </welcome-file-list>-->
 
 	<context-param>
 		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
@@ -43,6 +43,7 @@
 	<servlet-mapping>
 		<servlet-name>FrontServlet</servlet-name>
 		<url-pattern>/jsp/*</url-pattern>
+<!--		<url-pattern>/*</url-pattern>-->
 	</servlet-mapping>
 
 	<filter>
@@ -53,5 +54,15 @@
 		<filter-name>SessionLocaleFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<filter>
+		<filter-name>UrlAccessFilter</filter-name>
+		<filter-class>edu.demian.filter.UrlAccessFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlAccessFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 
 </web-app>

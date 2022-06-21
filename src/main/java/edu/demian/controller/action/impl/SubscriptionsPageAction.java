@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Account;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
 public class SubscriptionsPageAction extends Action {
 
     private final ReserveService reserveService = ServiceFactory.getReserveService(ServiceFactoryType.DEFAULT);

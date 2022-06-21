@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Account;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+@PageAccessor(allowedTo = {PageAccessorType.ALL})
 public final class CatalogPageAction extends Action {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";

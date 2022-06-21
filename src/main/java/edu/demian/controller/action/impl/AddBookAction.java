@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.entity.Book;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@PageAccessor(allowedTo = {PageAccessorType.ADMINISTRATOR})
 public final class AddBookAction extends Action {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");

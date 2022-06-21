@@ -3,8 +3,11 @@ package edu.demian.controller.action.impl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 
+@PageAccessor(allowedTo = {PageAccessorType.ALL})
 public final class HomePageAction extends Action {
 
 	@Override

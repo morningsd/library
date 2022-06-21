@@ -1,5 +1,7 @@
 package edu.demian.controller.action.impl;
 
+import edu.demian.annotation.PageAccessor;
+import edu.demian.annotation.PageAccessorType;
 import edu.demian.controller.action.Action;
 import edu.demian.controller.action.ActionException;
 import edu.demian.model.dao.impl.AccountDaoImpl;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@PageAccessor(allowedTo = {PageAccessorType.ADMINISTRATOR})
 public final class ManageAccountAction extends Action {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);
