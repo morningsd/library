@@ -8,25 +8,30 @@ import edu.demian.service.BookService;
 
 import java.util.List;
 
-public final class BookServiceImpl implements BookService {
+public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao = DaoFactory.getBookDao(DaoFactoryType.POSTGRESQL);
 
     @Override
-    public Book save(final Book book, final Integer quantity) {
+    public Book save(final Book book, final int quantity) {
         return bookDao.save(book, quantity);
     }
 
     @Override
-    public List<Book> findAllForUser(final Long id) {
+    public List<Book> findAllForUser(final long id) {
         return bookDao.findAllActiveForAccount(id);
     }
 
     @Override
-    public List<Book> searchAll(final String searchBy, final String searchData, final String nameOrder, final String authorOrder,
-                                final String publisherOrder, final String publisherDateOrder, final int limit, final long offset) {
-        return bookDao.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+    public List<Book> findAll(String searchBy, String searchData, String sortOrder, int limit, long offset) {
+        return bookDao.findAll(searchBy, searchData, sortOrder, limit, offset);
     }
+
+    @Override
+    public List<Book> findAll(String searchBy, String sortOrder, int limit, long offset) {
+        return bookDao.findAll(searchBy, sortOrder, limit, offset);
+    }
+
 
     @Override
     public List<Book> findAll(final String nameOrder, final String authorOrder, final String publisherOrder, final String publisherDateOrder,
@@ -35,7 +40,7 @@ public final class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void setStatus(Long bookId, Integer statusId) {
+    public void setStatus(long bookId, int statusId) {
         bookDao.setStatus(bookId, statusId);
     }
 

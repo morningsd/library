@@ -33,12 +33,12 @@ public class CabinetPage {
             final List<Reserve> reserveList = reserveService.findAllActiveForUser(account.getId());
             session.setAttribute("reserveList", reserveList);
             for (Reserve reserve: reserveList) {
-                final LocalDate createdDate = reserve.getCreatedDate();
+                final LocalDate currentDate = LocalDate.now();
                 final LocalDate finalDate = reserve.getFinalDate();
-                if (createdDate.isAfter(finalDate)) {
-                    long overdue = DAYS.between(createdDate, finalDate);
+                if (currentDate.isAfter(finalDate)) {
+                    long overdue = DAYS.between(currentDate, finalDate);
                     // TODO set fine from the properties file
-                    reserve.setFine(BigDecimal.valueOf(overdue * 1.5));
+                    reserve.setFine(BigDecimal.valueOf(-overdue * 1.5));
                 }
             }
         }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
 
-public final class UrlAccessFilter extends HttpFilter {
+public class UrlAccessFilter extends HttpFilter {
 
     @Override
     protected void doFilter(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain) throws IOException, ServletException {

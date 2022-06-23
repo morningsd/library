@@ -8,12 +8,9 @@ import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.web.annotation.PageAccessor;
 import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
-import edu.demian.web.controller.action.ActionException;
 import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -24,12 +21,24 @@ public class ReadersPage {
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);
 
     private void action(final HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Account reader = (Account) session.getAttribute("reader");
+
+        if (reader != null) {
+            long readerId = reader.getId();
+            List<Reserve> reserveList = reserveService.findAllForUser(readerId);
+
+            session.removeAttribute("reader");
+            session.setAttribute("reserveList", reserveList);
+
+            throw new RedirectException("/jsp/librarian/subscriptions");
+        }
 
     }
 
     private void subscriptions(final HttpServletRequest request) {
         String readerIdStr = request.getParameter("reader_id");
-        Long readerId = Long.parseLong(readerIdStr);
+        long readerId = Long.parseLong(readerIdStr);
 
         Account reader = accountService.find(readerId);
         List<Reserve> reserveList = reserveService.findAllForUser(readerId);

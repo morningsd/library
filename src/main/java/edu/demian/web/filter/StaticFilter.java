@@ -1,7 +1,5 @@
 package edu.demian.web.filter;
 
-import com.google.common.base.Strings;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,11 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public final class StaticFilter extends HttpFilter {
+public class StaticFilter extends HttpFilter {
 
     private static final String PATH_TO_SOURCE_STATIC_FILES_DIR = "../../src/main/webapp";
 

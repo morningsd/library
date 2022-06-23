@@ -25,7 +25,16 @@
                         <div class="col mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title"><i class="bi bi-book">${reserve.book.name}</i></h5>
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="card-title justify-content-between"><i
+                                                class="bi bi-book">${reserve.book.name}</i></h5>
+                                        <c:if test="${not empty reserve.fine}">
+                                            <small style="color: red"><i class="bi bi-basket3"><fmt:message
+                                                    key="cabinet_jsp.reservelist.fine"/>:
+                                                <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>
+                                            </small>
+                                        </c:if>
+                                    </div>
                                     <p class="card-text">
                                         <i class="bi bi-file-earmark-person">${reserve.book.author}</i><br>
                                         <i class="bi bi-briefcase">${reserve.book.publisher}</i><br>
@@ -33,40 +42,42 @@
                                     </p>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-muted justify-content-between"><i class="bi bi-basket3"><fmt:message
-                                            key="cabinet_jsp.reservelist.created_date"/>: ${reserve.createdDate}</i><i
-                                            class="bi bi-basket3"><fmt:message
-                                            key="cabinet_jsp.reservelist.final_date"/>: ${reserve.finalDate}</i></small>
+                                    <small class="text-muted justify-content-between">
+                                        <i class="bi bi-basket3"><fmt:message
+                                                key="cabinet_jsp.reservelist.created_date"/>: ${reserve.createdDate}</i>
+                                        <br>
+                                        <i class="bi bi-basket3"><fmt:message
+                                                key="cabinet_jsp.reservelist.final_date"/>: ${reserve.finalDate}</i></small>
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
                 </div>
-<%--                <ul class="list-group list-group-flush">--%>
-<%--                    <c:forEach var="reserve" items="${reserveList}">--%>
-<%--                        <li class="list-group-item">--%>
-<%--                            <div class="d-flex w-100 justify-content-between">--%>
-<%--                                <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>--%>
-<%--                                <i class="bi bi-basket3"><fmt:message--%>
-<%--                                        key="cabinet_jsp.reservelist.created_date"/>: ${reserve.createdDate}</i>--%>
-<%--                            </div>--%>
-<%--                            <div class="d-flex w-100 justify-content-between">--%>
-<%--                                <p class="mb-1">--%>
-<%--                                    <i class="bi bi-file-earmark-person">${reserve.book.author}</i>&nbsp;--%>
-<%--                                    <i class="bi bi-briefcase">${reserve.book.publisher}</i>&nbsp;--%>
-<%--                                    <i class="bi bi-calendar-date">${reserve.book.publishedDate}</i>--%>
-<%--                                </p>--%>
-<%--                                    &lt;%&ndash;@elvariable id="BigDecimal" type="java.math.BigDecimal"&ndash;%&gt;--%>
-<%--                                <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">--%>
-<%--                                    <i class="bi bi-basket3"><fmt:message key="cabinet_jsp.reservelist.fine"/>:--%>
-<%--                                        <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>--%>
-<%--                                </c:if>--%>
-<%--                                <i class="bi bi-basket3"><fmt:message--%>
-<%--                                        key="cabinet_jsp.reservelist.final_date"/>: ${reserve.finalDate}</i>--%>
-<%--                            </div>--%>
-<%--                        </li>--%>
-<%--                    </c:forEach>--%>
-<%--                </ul>--%>
+                <%--                <ul class="list-group list-group-flush">--%>
+                <%--                    <c:forEach var="reserve" items="${reserveList}">--%>
+                <%--                        <li class="list-group-item">--%>
+                <%--                            <div class="d-flex w-100 justify-content-between">--%>
+                <%--                                <h5 class="mb-1"><i class="bi bi-book">${reserve.book.name}</i></h5>--%>
+                <%--                                <i class="bi bi-basket3"><fmt:message--%>
+                <%--                                        key="cabinet_jsp.reservelist.created_date"/>: ${reserve.createdDate}</i>--%>
+                <%--                            </div>--%>
+                <%--                            <div class="d-flex w-100 justify-content-between">--%>
+                <%--                                <p class="mb-1">--%>
+                <%--                                    <i class="bi bi-file-earmark-person">${reserve.book.author}</i>&nbsp;--%>
+                <%--                                    <i class="bi bi-briefcase">${reserve.book.publisher}</i>&nbsp;--%>
+                <%--                                    <i class="bi bi-calendar-date">${reserve.book.publishedDate}</i>--%>
+                <%--                                </p>--%>
+                <%--                                    &lt;%&ndash;@elvariable id="BigDecimal" type="java.math.BigDecimal"&ndash;%&gt;--%>
+                <%--                                <c:if test="${not empty reserve.fine and reserve.fine.compareTo(BigDecimal.ZERO) ne 0}">--%>
+                <%--                                    <i class="bi bi-basket3"><fmt:message key="cabinet_jsp.reservelist.fine"/>:--%>
+                <%--                                        <fmt:formatNumber value="${reserve.fine}" minFractionDigits="0"/></i>--%>
+                <%--                                </c:if>--%>
+                <%--                                <i class="bi bi-basket3"><fmt:message--%>
+                <%--                                        key="cabinet_jsp.reservelist.final_date"/>: ${reserve.finalDate}</i>--%>
+                <%--                            </div>--%>
+                <%--                        </li>--%>
+                <%--                    </c:forEach>--%>
+                <%--                </ul>--%>
             </c:otherwise>
         </c:choose>
     </c:if>

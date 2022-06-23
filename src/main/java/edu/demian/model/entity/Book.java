@@ -4,23 +4,22 @@ import java.time.LocalDate;
 
 public class Book implements BaseEntity {
 
-    private Long id;
-
+    private long id;
     private String name;
     private String author;
     private String publisher;
     private LocalDate publishedDate;
-    private Integer statusId;
-    private Integer quantity;
+    private int statusId;
+    private int quantity;
 
     private BookStatus status;
 
     @Override
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -56,19 +55,19 @@ public class Book implements BaseEntity {
         this.publishedDate = publishedDate;
     }
 
-    public Integer getStatusId() {
+    public int getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(Integer statusId) {
+    public void setStatusId(int statusId) {
         this.statusId = statusId;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 

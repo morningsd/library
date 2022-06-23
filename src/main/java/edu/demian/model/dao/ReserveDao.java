@@ -8,9 +8,11 @@ public interface ReserveDao {
 
     void save(Reserve reserve);
 
-    List<Reserve> findAllActiveForUser(Long id);
+    List<Reserve> findAllActiveForUser(long id);
 
-    List<Reserve> findAllForUser(Long id);
+    List<Reserve> findAllForUser(long id);
 
     List<Reserve> findAllActive();
+
+    void setActive(long id, boolean isActive);
 }

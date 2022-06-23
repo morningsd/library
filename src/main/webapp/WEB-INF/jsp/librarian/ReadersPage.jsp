@@ -8,22 +8,25 @@
     <%--@elvariable id="readerList" type="java.util.List"--%>
     <c:if test="${empty readerList}">
         <div class="text-center">
-            <h2><fmt:message key="readers_jsp.title.no_readers_registered" /></h2>
+            <h2><fmt:message key="readers_jsp.title.no_readers_registered"/></h2>
         </div>
     </c:if>
     <c:if test="${not empty readerList}">
         <ul class="list-group list-group-flush">
             <c:forEach var="reader" items="${readerList}">
                 <li class="list-group-item">
-                    <i class="bi bi-file-earmark-person"><fmt:message key="readers_jsp.readerlist.fname" />: "${reader.firstName}"</i>&nbsp;
-                    <fmt:message key="readers_jsp.readerlist.lname" />: "${reader.lastName}"&nbsp;
-                    <fmt:message key="readers_jsp.readerlist.email" />: "${reader.email}"&nbsp;
+                    <form class="form-inline w-100 justify-content-between" method="get" action="">
+                        <span>
+                            <fmt:message key="readers_jsp.readerlist.fname"/>:${reader.firstName} |
+                            <fmt:message key="readers_jsp.readerlist.lname"/>:${reader.lastName} |
+                            [<fmt:message key="readers_jsp.readerlist.email"/>:${reader.email}]
+                        </span>
+                        <input type="hidden" name="action" value="subscriptions">
+                        <input type="hidden" name="reader_id" value="${reader.id}">
+                        <button type="submit" class="btn btn-outline-primary"><fmt:message
+                                key="readers_jsp.readerlist.button.view_subscriptions"/></button>
+                    </form>
                 </li>
-                <form class="form-inline" method="get" action="">
-                    <input type="hidden" name="action" value="subscriptions">
-                    <input type="hidden" name="reader_id" value="${reader.id}">
-                    <button type="submit" class="btn btn-outline-primary"><fmt:message key="readers_jsp.readerlist.button.view_subscriptions" /></button>
-                </form>
             </c:forEach>
         </ul>
     </c:if>

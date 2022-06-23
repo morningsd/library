@@ -58,12 +58,12 @@ public final class CatalogPageAction extends Action {
 
         List<Book> bookList;
         if (searchData != null) {
-            bookList = bookService.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+//            bookList = bookService.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
         } else {
             bookList = bookService.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
         }
 
-        session.setAttribute("bookList", bookList);
+//        session.setAttribute("bookList", bookList);
 
 
         Account account = (Account) session.getAttribute("account");

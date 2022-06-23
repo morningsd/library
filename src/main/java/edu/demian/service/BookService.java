@@ -7,13 +7,15 @@ import java.util.List;
 
 public interface BookService {
 
-    Book save(Book book, Integer quantity);
+    Book save(Book book, int quantity);
 
-    List<Book> findAllForUser(Long id);
+    List<Book> findAllForUser(long id);
 
-    List<Book> searchAll(String searchBy, String searchData, String nameOrder, String authorOrder, String publisherOrder, String publisherDateOrder, int limit, long offset);
+    List<Book> findAll(String searchBy, String searchData, String sortOrder, int limit, long offset);
+
+    List<Book> findAll(String searchBy, String sortOrder, int limit, long offset);
 
     List<Book> findAll(String nameOrder, String authorOrder, String publisherOrder, String publisherDateOrder, int limit, long offset);
 
-    void setStatus(Long bookId, Integer statusId);
+    void setStatus(long bookId, int statusId);
 }

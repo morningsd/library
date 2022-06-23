@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface AccountDao {
 
-    Account find(Long id);
+    Account find(long id);
 
     void save(Account account, String password);
 
-    void delete(Long id);
+    void delete(long id);
 
     List<Account> findAll();
 
@@ -20,9 +20,9 @@ public interface AccountDao {
 
     List<Account> findAllReaders();
 
-    void block(Long accountId);
+    void block(long accountId);
 
-    void unblock(Long accountId);
+    void unblock(long accountId);
 
 
 }

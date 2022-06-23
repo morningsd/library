@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public final class SessionLocaleFilter extends HttpFilter {
+public class SessionLocaleFilter extends HttpFilter {
 
     @Override
     protected void doFilter(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain) throws IOException, ServletException {

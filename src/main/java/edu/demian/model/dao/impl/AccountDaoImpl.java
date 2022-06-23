@@ -4,7 +4,6 @@ import com.google.common.hash.Hashing;
 import edu.demian.model.DBManager;
 import edu.demian.model.dao.AccountDao;
 import edu.demian.model.entity.Account;
-import edu.demian.model.entity.Role;
 import edu.demian.model.exception.DaoException;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +11,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class AccountDaoImpl implements AccountDao {
+public class AccountDaoImpl implements AccountDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
 
@@ -37,7 +36,7 @@ public final class AccountDaoImpl implements AccountDao {
     private static final String SQL_INSERT_ACCOUNT = "INSERT INTO account " +
             "(first_name, last_name, email, password, is_admin, is_blocked, role_id) VALUES (?,?,?,?,?,?,?)";
 
-    public Account find(final Long id) {
+    public Account find(final long id) {
         ResultSet rs = null;
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ACCOUNT, Statement.RETURN_GENERATED_KEYS)) {
@@ -122,24 +121,12 @@ public final class AccountDaoImpl implements AccountDao {
             pstmt.setString(k++, account.getLastName());
             pstmt.setString(k++, account.getEmail());
             pstmt.setString(k++, hashPassword(password));
-            final Boolean isAdmin = account.getAdmin();
-            if (isAdmin != null) {
-                pstmt.setBoolean(k++, isAdmin);
-            } else {
-                pstmt.setBoolean(k++, Boolean.FALSE);
-            }
-            final Boolean isBlocked = account.getBlocked();
-            if (isBlocked != null) {
-                pstmt.setBoolean(k++, isBlocked);
-            } else {
-                pstmt.setBoolean(k++, Boolean.FALSE);
-            }
-            final Integer roleId = account.getRoleId();
-            if (roleId != null) {
-                pstmt.setInt(k, roleId);
-            } else {
-                pstmt.setInt(k, Role.READER.ordinal());
-            }
+            final boolean isAdmin = account.getAdmin();
+            pstmt.setBoolean(k++, isAdmin);
+            final boolean isBlocked = account.getBlocked();
+            pstmt.setBoolean(k++, isBlocked);
+            final int roleId = account.getRoleId();
+            pstmt.setInt(k, roleId);
             if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't save an account");
             }
@@ -148,7 +135,7 @@ public final class AccountDaoImpl implements AccountDao {
         }
     }
 
-    public void delete(final Long id) {
+    public void delete(final long id) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_DELETE_ACCOUNT)) {
             pstmt.setLong(1, id);
@@ -160,7 +147,7 @@ public final class AccountDaoImpl implements AccountDao {
         }
     }
 
-    public void block(final Long accountId) {
+    public void block(final long accountId) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_BLOCK_ACCOUNT)) {
             pstmt.setLong(1, accountId);
@@ -171,7 +158,7 @@ public final class AccountDaoImpl implements AccountDao {
     }
 
 
-    public void unblock(final Long accountId) {
+    public void unblock(final long accountId) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_UNBLOCK_ACCOUNT)) {
             pstmt.setLong(1, accountId);

@@ -47,20 +47,17 @@
                     </div>
                     <div class="col-4">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <form class="form-inline mr-3" method="post" action="/jsp/librarian/manageOrders">
+                            <form class="form-inline mr-3" method="post" action="">
+                                <input type="hidden" name="action" value="subscribe">
                                 <input type="hidden" name="book_id" value="${reserve.book.id}">
                                 <input type="hidden" name="book_status" value="SUBSCRIPTION">
                                 <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.subscription" /></button>
                             </form>
-                            <form class="form-inline mr-3" method="post" action="/jsp/librarian/manageOrders">
+                            <form class="form-inline mr-3" method="post" action="">
+                                <input type="hidden" name="action" value="subscribe">
                                 <input type="hidden" name="book_id" value="${reserve.book.id}">
                                 <input type="hidden" name="book_status" value="READING_ROOM">
                                 <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.reading_room"/></button>
-                            </form>
-                            <form class="form-inline" method="post" action="/jsp/librarian/manageOrders">
-                                <input type="hidden" name="book_id" value="${reserve.book.id}">
-                                <input type="hidden" name="book_status" value="IN_STOCK">
-                                <button type="submit" class="btn btn-outline-primary"><fmt:message key="orders_jsp.reservelist.return" /></button>
                             </form>
                         </div>
                     </div>

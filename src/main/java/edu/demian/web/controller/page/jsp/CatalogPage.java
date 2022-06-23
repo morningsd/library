@@ -1,5 +1,6 @@
 package edu.demian.web.controller.page.jsp;
 
+import com.google.common.base.Strings;
 import edu.demian.model.entity.Account;
 import edu.demian.model.entity.Book;
 import edu.demian.model.entity.Reserve;
@@ -30,40 +31,37 @@ public class CatalogPage {
 
 
     private void action(final HttpServletRequest request) {
+        search(request);
+    }
+
+
+    private void search(final HttpServletRequest request) {
         final HttpSession session = request.getSession();
 
-        final String requestNameOrder = request.getParameter("sort_name");
-        final String requestAuthorOrder = request.getParameter("sort_author");
-        final String requestPublisherOrder = request.getParameter("sort_publisher");
-        final String requestPublishedDateOrder = request.getParameter("sort_date");
+        String sortOrder = request.getParameter("sort");
+        String searchBy = request.getParameter("searchBy");
+        final String searchData = request.getParameter("searchData");
 
-        final String searchData = request.getParameter("search_data");
-        final String searchBy = request.getParameter("search_by");
+        sortOrder = (sortOrder == null) ? (String) getAttribute(session, "sortOrder", "catalog.sort.") : sortOrder;
+        searchBy = (searchBy == null) ? (String) getAttribute(session, "searchBy", "catalog.sort.") : searchBy;
 
-        final String nameOrder = (requestNameOrder == null) ? (String) getAttribute(session, "nameOrder", "catalog.sort.") : requestNameOrder;
-        final String authorOrder = (requestAuthorOrder == null) ? (String) getAttribute(session, "authorOrder", "catalog.sort.") : requestAuthorOrder;
-        final String publisherOrder = (requestPublisherOrder == null) ? (String) getAttribute(session, "publisherOrder", "catalog.sort.") : requestPublisherOrder;
-        final String publisherDateOrder = (requestPublishedDateOrder == null) ? (String) getAttribute(session, "publishedDateOrder", "catalog.sort.") : requestPublishedDateOrder;
         final int limit = Integer.parseInt(getApplicationProperty("catalog.sort.limit"));
 
         final String currentPage = (String) getAttribute(session, "currentPage", "catalog.sort.");
 
         final long offset = getOffset(Long.parseLong(currentPage), limit);
 
-        session.setAttribute("nameOrder", nameOrder);
-        session.setAttribute("authorOrder", authorOrder);
-        session.setAttribute("publisherOrder", publisherOrder);
-        session.setAttribute("publishedDateOrder", publisherDateOrder);
+        session.setAttribute("sortOrder", sortOrder);
         session.setAttribute("currentPage", currentPage);
 
         session.setAttribute("searchData", searchData);
         session.setAttribute("searchBy", searchBy);
 
         List<Book> bookList;
-        if (searchData != null) {
-            bookList = bookService.searchAll(searchBy, searchData, nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+        if (!Strings.isNullOrEmpty(searchData)) {
+            bookList = bookService.findAll(searchBy, searchData, sortOrder, limit, offset);
         } else {
-            bookList = bookService.findAll(nameOrder, authorOrder, publisherOrder, publisherDateOrder, limit, offset);
+            bookList = bookService.findAll(searchBy, sortOrder, limit, offset);
         }
 
         session.setAttribute("bookList", bookList);
@@ -75,11 +73,6 @@ public class CatalogPage {
             accountBookList = bookService.findAllForUser(account.getId());
         }
         session.setAttribute("accountBookList", accountBookList);
-    }
-
-
-    private void search(final HttpServletRequest request) {
-
     }
 
 

@@ -7,21 +7,21 @@ import java.util.List;
 
 public interface BookDao {
 
-    Book save(Book book, Integer quantity);
+    Book save(Book book, int quantity);
 
-    void update(Book book);
+    void delete(long id);
 
-    void delete(Long id);
+    Book find(long id);
 
-    Book find(Long id);
+    List<Book> findAll(String searchBy, String searchData, String sortOrder, int limit, long offset);
+
+    List<Book> findAll(String searchBy, String sortOrder, int limit, long offset);
 
     List<Book> findAll(String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset);
 
-    public Book findInStock(Long uniqueBookId);
+    Book findInStock(long uniqueBookId);
 
-    List<Book> findAllActiveForAccount(Long id);
+    List<Book> findAllActiveForAccount(long id);
 
-    List<Book> searchAll(String searchBy, String searchData, String nameOrder, String authorOrder, String publisherOrder, String publishedDateOrder, int limit, long offset);
-
-    void setStatus(Long bookId, Integer statusId);
+    void setStatus(long bookId, int statusId);
 }

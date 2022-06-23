@@ -5,40 +5,40 @@ import java.time.LocalDate;
 
 public class Reserve implements BaseEntity {
 
-    private Long id;
-    private Long accountId;
-    private Long bookId;
+    private long id;
+    private long accountId;
+    private long bookId;
     private LocalDate createdDate;
     private LocalDate finalDate;
     private LocalDate submittedDate;
-    private Boolean isActive;
+    private boolean isActive;
     private BigDecimal fine;
 
     private Book book;
     private Account account;
 
     @Override
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public Long getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
-    public Long getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
@@ -66,11 +66,11 @@ public class Reserve implements BaseEntity {
         this.submittedDate = submittedDate;
     }
 
-    public Boolean getActive() {
+    public boolean getActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         isActive = active;
     }
 

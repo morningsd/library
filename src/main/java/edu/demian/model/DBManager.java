@@ -7,11 +7,11 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public final class DBManager {
+public class DBManager {
 
     private static DBManager instance;
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     private DBManager() {
         try {
@@ -32,7 +32,7 @@ public final class DBManager {
     }
 
     public Connection getConnection() {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {

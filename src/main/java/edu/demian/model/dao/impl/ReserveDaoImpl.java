@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class ReserveDaoImpl implements ReserveDao {
+public class ReserveDaoImpl implements ReserveDao {
 
     private static final DBManager DB_MANAGER_INSTANCE = DBManager.getInstance();
     private final BookDao bookDao = new BookDaoImpl();
@@ -31,7 +31,8 @@ public final class ReserveDaoImpl implements ReserveDao {
     private static final String SQL_RESERVE_BOOK = "UPDATE book SET status_id=2 WHERE id=?";
     private static final String SQL_FIND_ALL_ACTIVE_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=? AND is_active";
     private static final String SQL_FIND_ALL_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=?";
-    private static final String SQL_FIND_ALL_ACTIVE = "SELECT * FROM reserve WHERE is_active";
+    private static final String SQL_FIND_ALL_ACTIVE = "SELECT * FROM reserve WHERE is_active AND book_id IN (SELECT id FROM book WHERE status_id=2) ORDER BY created_date ASC";
+    private static final String SQL_CHANGE_STATUS = "UPDATE reserve SET is_active=? WHERE id=?";
 
 
     public void save(final Reserve reserve) {
@@ -78,7 +79,7 @@ public final class ReserveDaoImpl implements ReserveDao {
     }
 
     @Override
-    public List<Reserve> findAllActiveForUser(Long id) {
+    public List<Reserve> findAllActiveForUser(long id) {
         ResultSet rs = null;
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_ACTIVE_RESERVES_FOR_ACCOUNT)) {
@@ -95,7 +96,7 @@ public final class ReserveDaoImpl implements ReserveDao {
 
 
     @Override
-    public List<Reserve> findAllForUser(Long id) {
+    public List<Reserve> findAllForUser(long id) {
         ResultSet rs = null;
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_FIND_ALL_RESERVES_FOR_ACCOUNT)) {
@@ -122,6 +123,20 @@ public final class ReserveDaoImpl implements ReserveDao {
             throw new DaoException("Can't find all active reserves", e);
         } finally {
             DB_MANAGER_INSTANCE.close(rs);
+        }
+    }
+
+    @Override
+    public void setActive(long reserveId, boolean isActive) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(SQL_CHANGE_STATUS)) {
+            pstmt.setBoolean(1, isActive);
+            pstmt.setLong(2, reserveId);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't set reserve isActive");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't set reserve isActive");
         }
     }
 
@@ -154,12 +169,12 @@ public final class ReserveDaoImpl implements ReserveDao {
                     reserve.setId(resultSet.getLong(i));
                     break;
                 case SQL_RESERVE_ACCOUNT_ID:
-                    Long accountId = resultSet.getLong(i);
+                    long accountId = resultSet.getLong(i);
                     reserve.setAccountId(accountId);
                     reserve.setAccount(accountDao.find(accountId));
                     break;
                 case SQL_RESERVE_BOOK_ID:
-                    Long bookId = resultSet.getLong(i);
+                    long bookId = resultSet.getLong(i);
                     reserve.setBookId(bookId);
                     reserve.setBook(bookDao.find(bookId));
                     break;
