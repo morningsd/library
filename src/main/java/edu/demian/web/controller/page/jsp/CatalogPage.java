@@ -78,6 +78,11 @@ public class CatalogPage {
     }
 
 
+    private void search(final HttpServletRequest request) {
+
+    }
+
+
     private void orderBook(final HttpServletRequest request) {
         final HttpSession session = request.getSession();
         final Account account = (Account) session.getAttribute("account");

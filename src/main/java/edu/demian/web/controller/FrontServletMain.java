@@ -22,18 +22,19 @@ import java.util.stream.Collectors;
 public class FrontServletMain extends HttpServlet {
 
     private static final String JSP_EXTENSION = ".jsp";
-    private static final String PATH_TO_JSP_FILES_DIR = "WEB-INF/jsp";
+    private static final String PATH_TO_WEBINF_FILES_DIR = "WEB-INF";
 
     private static final String PAGE_PACKAGE = "page";
+//    private static final String JSP_PACKAGE = "jsp";
     private static final String BASE_PACKAGE = FrontServletMain.class.getPackage().getName() + "." + PAGE_PACKAGE;
 
-    private File jspDirectory;
+    private File webinfDirectory;
 
     @Override
     public void init() throws ServletException {
         ServletContext context = getServletContext();
-        jspDirectory = new File(context.getRealPath(PATH_TO_JSP_FILES_DIR));
-        isDirectory(jspDirectory);
+        webinfDirectory = new File(context.getRealPath(PATH_TO_WEBINF_FILES_DIR));
+        isDirectory(webinfDirectory);
     }
 
     private void isDirectory(File jspDirectory) throws ServletException {
@@ -116,17 +117,32 @@ public class FrontServletMain extends HttpServlet {
             }
         }
 
-        String jspFileStr = pageClass.getSimpleName() + JSP_EXTENSION;
+        String pathToJspFile = getJspFile(pageClass);
 
-        String pathToJspFile = jspDirectory.getCanonicalPath() + "/" + jspFileStr;
-        //TODO WEB-INF/jsp/librarian/OrdersPage.jsp
+        request.getRequestDispatcher("/WEB-INF/" + pathToJspFile).forward(request, response);
+    }
+
+
+    private String getJspFile(Class<?> pageClass) throws IOException, ServletException {
+        String pageClassName = pageClass.getName();
+
+        String classNamePart = pageClassName.substring(BASE_PACKAGE.length());
+
+        List<String> classNameParts = Arrays.stream(classNamePart.split("\\."))
+                .filter(part -> !Strings.isNullOrEmpty(part))
+                .collect(Collectors.toList());
+
+        String relativePathToJspFile = String.join("/", classNameParts) + JSP_EXTENSION;
+        String pathToJspFile = webinfDirectory.getCanonicalPath() + "/" + relativePathToJspFile;
+
         File jspFile = new File(pathToJspFile);
         if (!jspFile.isFile()) {
-            throw new ServletException("Can't find jsp file [jspFileName=" + jspFileStr + "]");
+            throw new ServletException("Can't find jsp file [jspFileName=" + relativePathToJspFile + "]");
         }
 
-        request.getRequestDispatcher("/WEB-INF/jsp/" + jspFileStr).forward(request, response);
+        return relativePathToJspFile;
     }
+
 
     private static class Route {
 

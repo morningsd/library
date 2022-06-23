@@ -3,9 +3,8 @@
 <c:set var="title" value="Error"/>
 <%@ include file="/WEB-INF/jspf/head.jspf" %>
 <body>
-<div class="container">
-    <h1>404</h1>
-    <p>Not Found</p>
+<div class="container text-center">
+    <img src="${pageContext.request.contextPath}/img/404.jpg" style="margin: 0 auto" alt="404 image">
 </div>
 </body>
 </html>

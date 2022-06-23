@@ -1,3 +1,6 @@
+<%--@elvariable id="reader" type="edu.demian.model.entity.Account"--%>
+<%--@elvariable id="reserveList" type="java.util.List"--%>
+<%--@elvariable id="BigDecimal" type="java.math.BigDecimal"--%>
 <%@ include file="/WEB-INF/jspf/page.jspf" %>
 <html>
 <c:set var="title" value="Subscription"/>
@@ -39,7 +42,6 @@
     </c:choose>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf" %>
-</div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

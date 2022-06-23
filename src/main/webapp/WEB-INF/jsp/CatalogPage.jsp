@@ -1,3 +1,12 @@
+<%--@elvariable id="searchData" type="java.lang.String"--%>
+<%--@elvariable id="searchBy" type="java.lang.String"--%>
+<%--@elvariable id="nameOrder" type="java.lang.String"--%>
+<%--@elvariable id="authorOrder" type="java.lang.String"--%>
+<%--@elvariable id="publisherOrder" type="java.lang.String"--%>
+<%--@elvariable id="publishedDateOrder" type="java.lang.String"--%>
+<%--@elvariable id="bookList" type="java.util.List"--%>
+<%--@elvariable id="account" type="edu.demian.model.entity.Account"--%>
+<%--@elvariable id="accountBookList" type="java.util.Collection"--%>
 <%@ include file="/WEB-INF/jspf/page.jspf" %>
 <html>
 <c:set var="title" value="Catalog"/>
@@ -8,6 +17,7 @@
     <div class="row">
         <div class="col-md-3">
             <form class="search_form" id="search_form" method="get" action="">
+                <input type="hidden" name="action" value="search">
                 <input class="form-control form-control-sm search_box" type="search"
                        placeholder="<fmt:message key="home_jsp.placeholder.search"/>"
                        name="search_data" value="${searchData}"
@@ -62,6 +72,19 @@
                         </c:choose>
                         <label class="form-check-label" for="by_publisher">
                             <fmt:message key="catalog_jsp.search.by_publisher" />
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <c:choose>
+                            <c:when test="${searchBy eq 'publishedDate' || empty searchBy}">
+                                <input class="form-check-input" type="radio" name="search_by" id="by_published_date" value="publishedDate" checked>
+                            </c:when>
+                            <c:otherwise>
+                                <input class="form-check-input" type="radio" name="search_by" id="by_published_date" value="publishedDate">
+                            </c:otherwise>
+                        </c:choose>
+                        <label class="form-check-label" for="by_published_date">
+                            <fmt:message key="catalog_jsp.search.by_published_date" />
                         </label>
                     </div>
                     <hr>
@@ -157,7 +180,6 @@
                         </c:choose>
                     </select>
                     <hr>
-
                 </div>
             </form>
         </div>

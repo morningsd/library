@@ -5,6 +5,7 @@
 <body>
 <div class="container">
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
+    <%--@elvariable id="readerList" type="java.util.List"--%>
     <c:if test="${empty readerList}">
         <div class="text-center">
             <h2><fmt:message key="readers_jsp.title.no_readers_registered" /></h2>
@@ -18,7 +19,8 @@
                     <fmt:message key="readers_jsp.readerlist.lname" />: "${reader.lastName}"&nbsp;
                     <fmt:message key="readers_jsp.readerlist.email" />: "${reader.email}"&nbsp;
                 </li>
-                <form class="form-inline" method="get" action="/jsp/librarian/subscriptions">
+                <form class="form-inline" method="get" action="">
+                    <input type="hidden" name="action" value="subscriptions">
                     <input type="hidden" name="reader_id" value="${reader.id}">
                     <button type="submit" class="btn btn-outline-primary"><fmt:message key="readers_jsp.readerlist.button.view_subscriptions" /></button>
                 </form>
