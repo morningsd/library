@@ -24,7 +24,9 @@ public class NotAvailableResourceFilter extends HttpFilter {
         if (uriParts.isEmpty()) {
             response.sendRedirect("/jsp/home");
             return;
-        } else if (!uriParts.get(0).equals("jsp")) {
+        } else if ("favicon.ico".equals(uriParts.get(0))) {
+            //do nothing
+        }  else if (!"jsp".equals(uriParts.get(0))) {
             response.sendRedirect("/jsp/notFound");
             return;
         }

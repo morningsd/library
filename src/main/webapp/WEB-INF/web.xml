@@ -40,7 +40,15 @@
 		<servlet-name>FrontServlet</servlet-name>
 		<url-pattern>/jsp/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<filter>
+		<filter-name>ExceptionHandlerFilter</filter-name>
+		<filter-class>edu.demian.web.filter.ExceptionHandlerFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ExceptionHandlerFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>StaticFilter</filter-name>
@@ -51,6 +59,7 @@
 		<url-pattern>/css/*</url-pattern>
 		<url-pattern>/js/*</url-pattern>
 		<url-pattern>/img/*</url-pattern>
+		<url-pattern>/favicon.ico</url-pattern>
 	</filter-mapping>
 
 
@@ -73,14 +82,14 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-<!--	<filter>-->
-<!--		<filter-name>UrlAccessFilter</filter-name>-->
-<!--		<filter-class>edu.demian.web.filter.UrlAccessFilter</filter-class>-->
-<!--	</filter>-->
-<!--	<filter-mapping>-->
-<!--		<filter-name>UrlAccessFilter</filter-name>-->
-<!--		<url-pattern>/*</url-pattern>-->
-<!--	</filter-mapping>-->
+	<filter>
+		<filter-name>UrlAccessFilter</filter-name>
+		<filter-class>edu.demian.web.filter.UrlAccessFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlAccessFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 
 </web-app>

@@ -12,7 +12,7 @@ import edu.demian.web.exception.RedirectException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@PageAccessor(allowedTo = {PageAccessorType.ALL})
+@PageAccessor(allowedTo = {PageAccessorType.NOT_LOGGED})
 public class LoginPage {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);

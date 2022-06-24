@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
-@PageAccessor(allowedTo = {PageAccessorType.ALL})
+@PageAccessor(allowedTo = {PageAccessorType.NOT_LOGGED, PageAccessorType.READER, PageAccessorType.LIBRARIAN, PageAccessorType.ADMINISTRATOR})
 public class CatalogPage {
 
     private static final String APPLICATION_PROPERTIES = "/application.properties";

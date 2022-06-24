@@ -6,7 +6,7 @@ import edu.demian.web.annotation.PageAccessorType;
 import javax.servlet.http.HttpServletRequest;
 
 @PageAccessor(allowedTo = {PageAccessorType.NOT_LOGGED, PageAccessorType.READER, PageAccessorType.LIBRARIAN, PageAccessorType.ADMINISTRATOR})
-public class NotFoundPage {
+public class ErrorPage {
 
     private void action(final HttpServletRequest request) {
 

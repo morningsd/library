@@ -11,7 +11,7 @@ import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
 
-@PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
+@PageAccessor(allowedTo = {PageAccessorType.ADMINISTRATOR})
 public class AddLibrarianPage {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);

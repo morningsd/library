@@ -1,7 +1,7 @@
 package edu.demian.web.annotation;
 
 public enum PageAccessorType {
-        ALL,
+        NOT_LOGGED,
         READER,
         LIBRARIAN,
         ADMINISTRATOR;

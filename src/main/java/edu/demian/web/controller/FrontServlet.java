@@ -144,7 +144,7 @@ public class FrontServlet extends HttpServlet {
     }
 
 
-    private static class Route {
+    public static class Route {
 
         private static final String PAGE = "Page";
 
@@ -159,11 +159,11 @@ public class FrontServlet extends HttpServlet {
             this.action = action;
         }
 
-        private String getClassName() {
+        public String getClassName() {
             return className;
         }
 
-        private String getAction() {
+        public String getAction() {
             return action;
         }
 
@@ -175,7 +175,7 @@ public class FrontServlet extends HttpServlet {
             return new Route(HomePage.class.getName(), DEFAULT_ACTION);
         }
 
-        private static Route newRoute(final HttpServletRequest request) {
+        public static Route newRoute(final HttpServletRequest request) {
             final String uri = request.getRequestURI();
 
             List<String> classNameParts = Arrays.stream(uri.split("/"))
