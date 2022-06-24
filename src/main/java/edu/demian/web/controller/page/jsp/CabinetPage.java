@@ -31,16 +31,18 @@ public class CabinetPage {
         final Role accountRole = (Role) session.getAttribute("accountRole");
         if (Role.READER.getName().equalsIgnoreCase(accountRole.toString())) {
             final List<Reserve> reserveList = reserveService.findAllActiveForUser(account.getId());
-            session.setAttribute("reserveList", reserveList);
             for (Reserve reserve: reserveList) {
-                final LocalDate currentDate = LocalDate.now();
                 final LocalDate finalDate = reserve.getFinalDate();
-                if (currentDate.isAfter(finalDate)) {
-                    long overdue = DAYS.between(currentDate, finalDate);
-                    // TODO set fine from the properties file
-                    reserve.setFine(BigDecimal.valueOf(-overdue * 1.5));
+                if (finalDate != null) {
+                    final LocalDate currentDate = LocalDate.now();
+                    if (currentDate.isAfter(finalDate)) {
+                        long overdue = DAYS.between(currentDate, finalDate);
+                        // TODO set fine from the properties file
+                        reserve.setFine(BigDecimal.valueOf(-overdue * 1.5));
+                    }
                 }
             }
+            session.setAttribute("reserveList", reserveList);
         }
         if (Role.LIBRARIAN.getName().equalsIgnoreCase(accountRole.toString())) {
             // list of users' orders

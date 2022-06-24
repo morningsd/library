@@ -6,11 +6,9 @@ import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.web.annotation.PageAccessor;
 import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
 import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @PageAccessor(allowedTo = {PageAccessorType.ALL})
 public class RegisterPage {

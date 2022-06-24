@@ -1,7 +1,6 @@
 package edu.demian.model.dao;
 
 import edu.demian.model.entity.Book;
-import edu.demian.model.entity.BookStatus;
 
 import java.util.List;
 
@@ -23,5 +22,5 @@ public interface BookDao {
 
     List<Book> findAllActiveForAccount(long id);
 
-    void setStatus(long bookId, int statusId);
+    void makeSubscription(long bookId, int statusId);
 }

@@ -10,14 +10,11 @@ import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
 import edu.demian.web.annotation.PageAccessor;
 import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.ActionException;
 import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
 
@@ -85,7 +82,6 @@ public class CatalogPage {
         final Reserve reserve = new Reserve();
         reserve.setAccountId(account.getId());
         reserve.setBookId(Long.parseLong(bookId));
-        reserve.setFinalDate(LocalDate.now().plusMonths(1));
 
         reserveService.save(reserve);
 
@@ -106,7 +102,7 @@ public class CatalogPage {
             properties.load(CatalogPage.class.getResourceAsStream(APPLICATION_PROPERTIES));
             return properties.getProperty(name);
         } catch (IOException e) {
-            throw new ActionException("Can't read property [" + name + "] from file: " + APPLICATION_PROPERTIES , e);
+            throw new RuntimeException("Can't read property [" + name + "] from file: " + APPLICATION_PROPERTIES , e);
         }
     }
 

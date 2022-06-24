@@ -11,6 +11,7 @@ import edu.demian.web.annotation.PageAccessorType;
 import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 @PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
@@ -26,13 +27,20 @@ public class OrdersPage {
 
     private void subscribe(final HttpServletRequest request) {
         String bookIdStr = request.getParameter("book_id");
+        String reserveIdStr = request.getParameter("reserve_id");
         String bookStatusStr = request.getParameter("book_status");
 
-        Long bookId = Long.parseLong(bookIdStr);
+        long bookId = Long.parseLong(bookIdStr);
+        long reserveId = Long.parseLong(reserveIdStr);
         BookStatus bookStatus = BookStatus.valueOf(bookStatusStr);
         int bookStatusId = bookStatus.getId();
 
-        bookService.setStatus(bookId, bookStatusId);
+        bookService.makeSubscription(bookId, bookStatusId);
+        LocalDate startDate = LocalDate.now();
+        LocalDate finalDate = startDate.plusMonths(1);
+        reserveService.setStartDate(reserveId, startDate);
+        reserveService.setFinalDate(reserveId, finalDate);
+
         throw new RedirectException("/jsp/librarian/orders");
     }
 

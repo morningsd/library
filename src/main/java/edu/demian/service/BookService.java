@@ -1,7 +1,6 @@
 package edu.demian.service;
 
 import edu.demian.model.entity.Book;
-import edu.demian.model.entity.BookStatus;
 
 import java.util.List;
 
@@ -17,5 +16,5 @@ public interface BookService {
 
     List<Book> findAll(String nameOrder, String authorOrder, String publisherOrder, String publisherDateOrder, int limit, long offset);
 
-    void setStatus(long bookId, int statusId);
+    void makeSubscription(long bookId, int statusId);
 }

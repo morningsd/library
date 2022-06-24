@@ -6,7 +6,8 @@
 <div class="container">
     <%@ include file="/WEB-INF/jspf/header.jspf" %>
 
-    <form action="/jsp/admin/addBook" method="post">
+    <form action="" method="post">
+        <input type="hidden" name="action" value="addBook">
         <div class="form-group">
             <label for="name"><fmt:message key="addbook_jsp.label.name"/>:</label>
             <input type="text" class="form-control" placeholder="<fmt:message key="addbook_jsp.placeholder.name" />"

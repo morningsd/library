@@ -20,7 +20,8 @@
                             <fmt:message key="managelibrarians_jsp.librarianlist.lname" />: "${librarian.lastName}"&nbsp;
                             <fmt:message key="managelibrarians_jsp.librarianlist.email" />: "${librarian.email}"&nbsp;
                             <fmt:message key="managelibrarians_jsp.librarianlist.is_blocked" />: "${librarian.blocked}"&nbsp;
-                            <form class="form-inline" method="post" action="/jsp/admin/deleteLibrarian">
+                            <form class="form-inline" method="post" action="">
+                                <input type="hidden" name="action" value="deleteLibrarian">
                                 <input type="hidden" name="librarian_id" value="${librarian.id}">
                                 <button type="submit" class="btn btn-outline-secondary"><fmt:message
                                         key="managelibrarians_jsp.librarianlist.button.delete"/></button>

@@ -1,28 +1,27 @@
-package edu.demian.web.controller.action.impl;
+package edu.demian.web.controller.page.jsp.admin;
 
-import edu.demian.web.annotation.PageAccessor;
-import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
 import edu.demian.model.entity.Account;
+import edu.demian.model.entity.Role;
 import edu.demian.service.AccountService;
 import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
+import edu.demian.web.annotation.PageAccessor;
+import edu.demian.web.annotation.PageAccessorType;
+import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-@PageAccessor(allowedTo = {PageAccessorType.ALL})
-public final class RegisterPageAction extends Action {
+@PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
+public class AddLibrarianPage {
 
     private final AccountService accountService = ServiceFactory.getAccountService(ServiceFactoryType.DEFAULT);
 
-    @Override
-    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) {
-        return "/register";
+    private void action(final HttpServletRequest request) {
+
     }
 
-    @Override
-    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) {
+
+    private void addLibrarian(final HttpServletRequest request) {
         final String firstName = request.getParameter("fname");
         final String lastName = request.getParameter("lname");
         final String email = request.getParameter("email");
@@ -32,9 +31,10 @@ public final class RegisterPageAction extends Action {
         account.setFirstName(firstName);
         account.setLastName(lastName);
         account.setEmail(email);
+        account.setRoleId(Role.LIBRARIAN.ordinal());
 
-        accountService.save(account, password);
+        accountService.saveLibrarian(account, password);
 
-        return "redirect:/login";
+        throw new RedirectException("/jsp/admin/manageLibrarians");
     }
 }

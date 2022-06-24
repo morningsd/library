@@ -61,6 +61,7 @@
                                     <br>
                                     <i class="bi bi-basket3"><fmt:message
                                             key="cabinet_jsp.reservelist.final_date"/>: ${reserve.finalDate}</i>
+                                    <br>
                                     <c:if test="${not empty reserve.submittedDate}">
                                         <i class="bi bi-basket3"><fmt:message
                                                 key="subscriptions_jsp.reservelist.submitted_date"/>:&nbsp;${reserve.submittedDate}</i>

@@ -26,13 +26,17 @@ public class ReserveDaoImpl implements ReserveDao {
     private static final String SQL_RESERVE_FINAL_DATE = "final_date";
     private static final String SQL_RESERVE_IS_ACTIVE = "is_active";
     private static final String SQL_RESERVE_SUBMITTED_DATE = "submitted_date";
+    private static final String SQL_RESERVE_START_DATE = "start_date";
 
-    private static final String SQL_INSERT_RESERVE = "INSERT INTO reserve(account_id, book_id, final_date) VALUES (?,?,?)";
+    private static final String SQL_INSERT_RESERVE = "INSERT INTO reserve(account_id, book_id) VALUES (?,?)";
     private static final String SQL_RESERVE_BOOK = "UPDATE book SET status_id=2 WHERE id=?";
     private static final String SQL_FIND_ALL_ACTIVE_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=? AND is_active";
     private static final String SQL_FIND_ALL_RESERVES_FOR_ACCOUNT = "SELECT * FROM reserve WHERE account_id=?";
     private static final String SQL_FIND_ALL_ACTIVE = "SELECT * FROM reserve WHERE is_active AND book_id IN (SELECT id FROM book WHERE status_id=2) ORDER BY created_date ASC";
     private static final String SQL_CHANGE_STATUS = "UPDATE reserve SET is_active=? WHERE id=?";
+    private static final String SQL_CHANGE_START_DATE = "UPDATE reserve SET start_date=? WHERE id=?";
+    private static final String SQL_CHANGE_FINAL_DATE = "UPDATE reserve SET final_date=? WHERE id=?";
+    private static final String SQL_CHANGE_SUBMITTED_DATE = "UPDATE reserve SET submitted_date=? WHERE id=?";
 
 
     public void save(final Reserve reserve) {
@@ -49,7 +53,6 @@ public class ReserveDaoImpl implements ReserveDao {
             pstmt = connection.prepareStatement(SQL_INSERT_RESERVE, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, reserve.getAccountId());
             pstmt.setLong(2, reserve.getBookId());
-            pstmt.setObject(3, reserve.getFinalDate());
             if (pstmt.executeUpdate() == 1) {
                 rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
@@ -140,6 +143,48 @@ public class ReserveDaoImpl implements ReserveDao {
         }
     }
 
+    @Override
+    public void setStartDate(long reserveId, LocalDate now) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_CHANGE_START_DATE)) {
+            pstmt.setObject(1, now);
+            pstmt.setLong(2, reserveId);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't set reserve startDate");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't set reserve startDate");
+        }
+    }
+
+    @Override
+    public void setFinalDate(long reserveId, LocalDate finalDate) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_CHANGE_FINAL_DATE)) {
+            pstmt.setObject(1, finalDate);
+            pstmt.setLong(2, reserveId);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't set reserve finalDate");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't set reserve finalDate");
+        }
+    }
+
+    @Override
+    public void setSubmittedDate(long reserveId, LocalDate submittedDate) {
+        try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(SQL_CHANGE_SUBMITTED_DATE)) {
+            pstmt.setObject(1, submittedDate);
+            pstmt.setLong(2, reserveId);
+            if (pstmt.executeUpdate() != 1) {
+                throw new DaoException("Can't set reserve submittedDate");
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can't set reserve submittedDate");
+        }
+    }
+
 
     private List<Reserve> toReserveList(final ResultSetMetaData metaData, final ResultSet resultSet) throws SQLException {
         final List<Reserve> reserveList = new LinkedList<>();
@@ -177,6 +222,9 @@ public class ReserveDaoImpl implements ReserveDao {
                     long bookId = resultSet.getLong(i);
                     reserve.setBookId(bookId);
                     reserve.setBook(bookDao.find(bookId));
+                    break;
+                case SQL_RESERVE_START_DATE:
+                    reserve.setStartDate(resultSet.getObject(i, LocalDate.class));
                     break;
                 case SQL_RESERVE_CREATED_DATE:
                     reserve.setCreatedDate(resultSet.getObject(i, LocalDate.class));

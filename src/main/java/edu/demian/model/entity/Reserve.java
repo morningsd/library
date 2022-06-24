@@ -9,6 +9,7 @@ public class Reserve implements BaseEntity {
     private long accountId;
     private long bookId;
     private LocalDate createdDate;
+    private LocalDate startDate;
     private LocalDate finalDate;
     private LocalDate submittedDate;
     private boolean isActive;
@@ -48,6 +49,18 @@ public class Reserve implements BaseEntity {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public LocalDate getFinalDate() {

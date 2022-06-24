@@ -13,6 +13,7 @@ import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 
 @PageAccessor(allowedTo = {PageAccessorType.LIBRARIAN})
@@ -32,7 +33,7 @@ public class SubscriptionsPage {
         long bookId = Long.parseLong(bookIdStr);
         long reserveId = Long.parseLong(reserveIdStr);
 
-        reserveService.returnBook(reserveId, bookId);
+        reserveService.returnBook(reserveId, bookId, LocalDate.now());
 
         throw new RedirectException("/jsp/librarian/readers");
     }

@@ -8,6 +8,7 @@ import edu.demian.model.entity.BookStatus;
 import edu.demian.model.entity.Reserve;
 import edu.demian.service.ReserveService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class ReserveServiceImpl implements ReserveService {
@@ -36,8 +37,19 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public void returnBook(long reserveId, long bookId) {
+    public void returnBook(long reserveId, long bookId, LocalDate submittedDate) {
         reserveDao.setActive(reserveId, false);
-        bookDao.setStatus(bookId, BookStatus.IN_STOCK.getId());
+        reserveDao.setSubmittedDate(reserveId, submittedDate);
+        bookDao.makeSubscription(bookId, BookStatus.IN_STOCK.getId());
+    }
+
+    @Override
+    public void setStartDate(long reserveId, LocalDate now) {
+        reserveDao.setStartDate(reserveId, now);
+    }
+
+    @Override
+    public void setFinalDate(long reserveId, LocalDate finalDate) {
+        reserveDao.setFinalDate(reserveId, finalDate);
     }
 }

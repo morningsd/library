@@ -8,7 +8,8 @@
     <div class="text-center">
         <h2><fmt:message key="addlibrarian_jsp.title.register_librarian" /></h2>
     </div>
-    <form action="/jsp/admin/addLibrarian" method="post" name="registration">
+    <form action="" method="post" name="registration">
+        <input type="hidden" name="action" value="addLibrarian">
         <div class="row form-group">
             <div class="col">
                 <label for="fname"><fmt:message key="addlibrarian_jsp.label.fname" />:</label>

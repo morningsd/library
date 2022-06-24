@@ -175,10 +175,11 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void setStatus(long bookId, int statusId) {
+    public void makeSubscription(long bookId, int statusId) {
         try (Connection connection = DB_MANAGER_INSTANCE.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(SQL_UPDATE_STATUS)) {
             pstmt.setInt(1, statusId);
+            pstmt.setObject(2, LocalDate.now());
             pstmt.setLong(2, bookId);
             if (pstmt.executeUpdate() != 1) {
                 throw new DaoException("Can't update book status");

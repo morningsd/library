@@ -20,12 +20,14 @@
                     <fmt:message key="manageaccounts_jsp.accountlist.email" />: "${account.email}"&nbsp;
                     <fmt:message key="manageaccounts_jsp.accountlist.is_admin"/>: "${account.admin}"&nbsp;
                     <fmt:message key="manageaccounts_jsp.accountlist.is_blocked" />: "${account.blocked}"&nbsp;
-                    <form class="form-inline" method="post" action="/jsp/admin/unblockAccount">
+                    <form class="form-inline" method="post" action="">
+                        <input type="hidden" name="action" value="unblock">
                         <input type="hidden" name="account_id" value="${account.id}">
                         <button type="submit" class="btn btn-outline-primary"><fmt:message
                                 key="manageaccounts_jsp.accountlist.button.unblock"/></button>
                     </form>
-                    <form class="form-inline" method="post" action="/jsp/admin/blockAccount">
+                    <form class="form-inline" method="post" action="">
+                        <input type="hidden" name="action" value="block">
                         <input type="hidden" name="account_id" value="${account.id}">
                         <button type="submit" class="btn btn-outline-secondary"><fmt:message
                                 key="manageaccounts_jsp.accountlist.button.block"/></button>

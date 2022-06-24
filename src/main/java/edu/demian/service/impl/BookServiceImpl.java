@@ -1,6 +1,7 @@
 package edu.demian.service.impl;
 
 import edu.demian.model.dao.BookDao;
+import edu.demian.model.dao.ReserveDao;
 import edu.demian.model.dao.factory.DaoFactory;
 import edu.demian.model.dao.factory.DaoFactoryType;
 import edu.demian.model.entity.Book;
@@ -40,8 +41,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void setStatus(long bookId, int statusId) {
-        bookDao.setStatus(bookId, statusId);
+    public void makeSubscription(long bookId, int statusId) {
+        bookDao.makeSubscription(bookId, statusId);
     }
 
 }

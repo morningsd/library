@@ -1,33 +1,29 @@
-package edu.demian.web.controller.action.impl;
+package edu.demian.web.controller.page.jsp.admin;
 
-import edu.demian.web.annotation.PageAccessor;
-import edu.demian.web.annotation.PageAccessorType;
-import edu.demian.web.controller.action.Action;
-import edu.demian.web.controller.action.ActionException;
 import edu.demian.model.entity.Book;
 import edu.demian.model.entity.BookStatus;
 import edu.demian.service.BookService;
 import edu.demian.service.factory.ServiceFactory;
 import edu.demian.service.factory.ServiceFactoryType;
+import edu.demian.web.annotation.PageAccessor;
+import edu.demian.web.annotation.PageAccessorType;
+import edu.demian.web.exception.RedirectException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @PageAccessor(allowedTo = {PageAccessorType.ADMINISTRATOR})
-public final class AddBookAction extends Action {
+public class AddBookPage {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
     private final BookService bookService = ServiceFactory.getBookService(ServiceFactoryType.DEFAULT);
 
-    @Override
-    protected String doGet(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
-        return "/admin/addBook";
+    private void action(final HttpServletRequest request) {
+
     }
 
-    @Override
-    protected String doPost(final HttpServletRequest request, final HttpServletResponse response) throws ActionException {
+    private void addBook(final HttpServletRequest request) {
         final String name = request.getParameter("name");
         final String author = request.getParameter("author");
         final String publisher = request.getParameter("publisher");
@@ -41,8 +37,8 @@ public final class AddBookAction extends Action {
         book.setPublishedDate(LocalDate.parse(publishedDate, formatter));
         book.setStatusId(BookStatus.IN_STOCK.getId());
 
-        Book savedBook = bookService.save(book, Integer.parseInt(quantity));
+        bookService.save(book, Integer.parseInt(quantity));
 
-        return "redirect:/catalog";
+        throw new RedirectException("/jsp/catalog");
     }
 }
